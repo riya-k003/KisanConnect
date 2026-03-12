@@ -39,7 +39,7 @@ exports.loginUser = async (req, res)=>{
        
         db.query(sql , [email] , async (err , result)=>{
 
-             if(result.length == 0){
+             if(result.length === 0){
                 return res.send("User not found");
             }
             const user = result[0];
@@ -50,7 +50,7 @@ exports.loginUser = async (req, res)=>{
                      });
                  }
                  const token = jwt.sign(
-                    {id: user.id , email: user.email},
+                    {id: user.id , email: user.email , role: user.role },
                     process.env.JWT_SECRET,
                     {expiresIn : "1h"}
                  );
