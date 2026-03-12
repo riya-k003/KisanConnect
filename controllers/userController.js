@@ -1,5 +1,7 @@
+require("dotenv").config();
 const db = require("../config/db.js");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 exports.registerUser = async (req, res) => {
     console.log("register api hit");
@@ -24,29 +26,43 @@ exports.registerUser = async (req, res) => {
     }
 };
 
-exports.loginUser = async (req,res) => {
+exports.loginUser = async (req, res)=>{
+    console.log("login api hit");
+    const{ email , password} = req.body;
 
-    const {email , password} = req.body;
+    if(!email || !password){
+        return res.send("Email and password required");
+    }
 
-    const sql = "SELECT * FROM users WHERE email = ?";
+    try{
+        const sql = "SELECT * FROM users WHERE  email = ? ";
+       
+        db.query(sql , [email] , async (err , result)=>{
 
-    db.query(sql , [email] , async(err , result) => {
-        if(err){
-            console.log(err);
-            return res.send("DataBase Error");
-        }
-        if(result.length === 0){
-            return res.send("User not found");
-        }
+             if(result.length == 0){
+                return res.send("User not found");
+            }
+            const user = result[0];
+                 const isMatch = await bcrypt.compare(password , user.password);
+                 if(!isMatch){
+                     return res.status(400).json({
+                        message:"Wrong Password"
+                     });
+                 }
+                 const token = jwt.sign(
+                    {id: user.id , email: user.email},
+                    process.env.JWT_SECRET,
+                    {expiresIn : "1h"}
+                 );
+                   res.status(200).json({
+                        message:"Login Successful",
+                        token : token
+                     });
 
-        const user = result[0];
+        });
+    }catch(error){
+        console.log(error);
+        res.send("Server error");
 
-        const isMatch = await bcrypt.compare(password , user.password);
-
-        if(!isMatch){
-            return res.send("Invalid password");
-        }
-        res.send("Login successfull");
-    });
-
+    }
 };
