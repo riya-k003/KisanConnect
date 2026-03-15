@@ -6,10 +6,11 @@ const userRoutes = require("./routes/userRoutes");
 const tipsRoutes = require("./routes/tipsRoutes");
 
 
+
 app.use(express.json());
 
 app.use("/api/users" , userRoutes);
-app.use("/tips" , tipsRoutes);
+app.use("api/tips" , tipsRoutes);
 
 
 app.listen(3000 , ()=>{
