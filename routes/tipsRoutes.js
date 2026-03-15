@@ -8,7 +8,7 @@ const {verifyToken} = require("../middleware/authmiddleware");
 const {isFarmer} = require("../middleware/rolemiddleware");
 
 
-router.post("/create" , verifyToken , isFarmer , createTip);
-router.get("/", viewTips);
+router.post("/" , verifyToken , isFarmer , createTip);
+router.get("/" , viewTips);
 
 module.exports = router;
