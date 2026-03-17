@@ -1,18 +1,18 @@
-const mysql = require('mysql2')
+const mysql = require('mysql2/promise')
 
-const connection = mysql.createConnection({
+const db = mysql.createPool({
     host:'localhost',
     user:'root',
     password: '0330',
     database:'KisanConnect'
 });
+// db.connect((err) => {
+//     if (err) {
+//         console.error("Database connection failed:", err);
+//         return;
+//     }
+    console.log("Database connected");
+// });
 
-connection.connect((err)=>{
-    if(err){
-        console.error('Database connection failed:' + err.stack);
-        return;
-    }
-    console.log('Database connected');
-});
 
-module.exports = connection;
+module.exports = db;
