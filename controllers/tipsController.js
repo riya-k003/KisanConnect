@@ -20,7 +20,9 @@ exports.createTip = (req , res) =>{
     })
 };
 
-exports.viewTips = (req, res)=>{
+exports.viewTips = async (req, res)=>{
+    console.log("viewTips API hit");
+    const user_id = req.user.id;
     const page = parseInt(req.query.page) || 1 ;
 
     
@@ -36,25 +38,33 @@ exports.viewTips = (req, res)=>{
         t.content,
         t.category,
         t.created_at,
-        u.name AS farmer_name
+        u.name AS farmer_name,
+        COUNT(l.tip_id) AS likes_count,
+        COALESCE(SUM(l.user_id = ?),0) > 0 AS isLiked
         FROM tips t
         JOIN users u ON t.farmer_id = u.id
+        LEFT JOIN likes l ON t.tip_id = l.tip_id
+        GROUP BY t.tip_id
         ORDER BY t.tip_id DESC
         LIMIT ? OFFSET ?
         `;
+        try{
+    console.log("Before query");
 
-        db.query(sql , [limit , offset] , (err , results) =>{
-            if(err){
-                console.error(err);
-                return res.status(500).json({
-                    message:"Server error"
-                });
-            }
+        const [results] = await db.query(sql , [user_id , limit , offset]);
+            console.log("After query");
+           
             res.json({
                 page, 
                 tips : results
             });
-        });
+        }catch(err){
+            console.log("DB ERROR:" , err);
+            res.status(500).json({
+                message: "server error"
+            });
+        }
+
 };
 
 exports.togglelike = async (req, res)=>{
