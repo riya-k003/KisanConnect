@@ -9,18 +9,25 @@ function Tips(){
         .then((res)=> res.json())
         .then((data)=> {
             console.log("DATA:" , data);
-            console.log("DATA:" , data.tips);
-            console.log("STATE TIPS:", tips);
             setTips(data.tips);
         });
     }, []);
 
+    useEffect(()=>{
+        console.log("UPDATED TIPS:" , tips);
+    }, [tips]);
+
+
+
     return(
         <>
-        <div className="container">
+        <div className="bg-red-500 text-white">
             <h2>All Tips</h2>
             <div className="tip-container">
-                {Array.isArray(tips) && tips.map((tip)=>{
+                {tips.length === 0 ? (
+                    <p>Loading...</p>
+                ): (
+                    tips.map((tip)=>(
                     <div key={tip.tip_id}>
                         <h3>{tip.title}</h3>
                         <p>{tip.content}</p>
@@ -30,7 +37,8 @@ function Tips(){
 
                         <button>Like</button>
                     </div>
-                })}
+                    ))
+               )}
             </div>
         </div>
         
