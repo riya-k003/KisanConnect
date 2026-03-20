@@ -1,3 +1,4 @@
+const cors = require("cors");
 const express = require("express");
 const app = express();
 require("dotenv").config();
@@ -7,7 +8,7 @@ const tipsRoutes = require("./routes/tipsRoutes");
 console.log("tipsRoutes imported");
 
 
-
+app.use(cors());
 app.use(express.json());
 
 app.use("/api/users" , userRoutes);

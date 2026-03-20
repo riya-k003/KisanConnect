@@ -22,12 +22,12 @@ exports.createTip = (req , res) =>{
 
 exports.viewTips = async (req, res)=>{
     console.log("viewTips API hit");
-    const user_id = req.user.id;
+    const user_id = req.user ? req.user.id : null;
     const page = parseInt(req.query.page) || 1 ;
 
     
 
-    const limit = 10;
+    const limit = parseInt(req.query.limit) || 10;
 
     const offset = (page - 1)*limit;
 
@@ -40,10 +40,10 @@ exports.viewTips = async (req, res)=>{
         t.created_at,
         u.name AS farmer_name,
         COUNT(l.tip_id) AS likes_count,
-        COALESCE(SUM(l.user_id = ?),0) > 0 AS isLiked
+        COALESCE(SUM(l.user_id IS NOT NULL),0) > 0 AS isLiked
         FROM tips t
         JOIN users u ON t.farmer_id = u.id
-        LEFT JOIN likes l ON t.tip_id = l.tip_id
+        LEFT JOIN likes l ON t.tip_id = l.tip_id AND l.user_id = ?
         GROUP BY t.tip_id
         ORDER BY t.tip_id DESC
         LIMIT ? OFFSET ?
