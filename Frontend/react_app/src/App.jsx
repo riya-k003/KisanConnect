@@ -1,11 +1,15 @@
-import Tips from "./Tips"
+import Tips from "./tipsview/Tips";
+import "./index.css";
 function App() {
   
 
   return (
     <>
-      <div>
-        <h1>KisanConnect</h1>
+        <header>
+          <h1 className="head">KisanConnect</h1>
+        </header>
+      <div className="page-content">
+       
         <Tips/>
       </div>
       
