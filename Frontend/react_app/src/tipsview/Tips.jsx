@@ -20,11 +20,13 @@ function Tips(){
     
     const handleClick = async (tip_id) =>{
        const updatedTips = tips.map((tip)=>{
+        console.log(tip.likes_count, typeof tip.like_count);
         if(tip.tip_id === tip_id){
+            console.log(tip);
             return {
                 ... tip,
                 isLiked : !tip.isLiked,
-                like_count : tip.isLiked ? tip.like_count +1  : tip.like_count11
+                likes_count : tip.isLiked ? tip.likes_count -1  : tip.likes_count+1
 
             };
         }
@@ -64,7 +66,7 @@ function Tips(){
                             handleClick(tip.tip_id)}>
                                 {tip.isLiked ? "💖" : "🤍"}
                         </button>
-                        <span>{tip.like_count}</span>
+                        <span>{tip.likes_count}</span>
                        </div>
                     </div>
                     ))

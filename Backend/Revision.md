@@ -343,3 +343,149 @@ Before writing new backend code:
 
 ---
 
+# 💬 Comment Feature (Tips)
+
+---
+
+## 🎯 Goal
+
+Enable users to:
+
+* Add comments on tips
+* View comments under each tip
+
+---
+
+## 🧠 Database Design
+
+### Table: `comments`
+
+| Column     | Type                     | Description                 |
+| ---------- | ------------------------ | --------------------------- |
+| comment_id | INT (PK, AUTO_INCREMENT) | Unique comment identifier   |
+| tip_id     | INT (FK)                 | Associated tip              |
+| user_id    | INT (FK)                 | User who posted the comment |
+| content    | TEXT                     | Comment text                |
+| created_at | DATETIME                 | Timestamp of creation       |
+
+### 🔗 Relationships
+
+* `tip_id` → references `tips.tip_id`
+* `user_id` → references `users.user_id`
+
+---
+
+## 🔄 API Design
+
+### ➤ Add Comment
+
+```
+POST /tips/:tip_id/comments
+```
+
+### ➤ Get Comments for a Tip
+
+```
+GET /tips/:tip_id/comments
+```
+
+---
+
+## ⚙️ Controller Flow
+
+### ➤ Add Comment
+
+1. Extract `tip_id` from URL params
+2. Extract `user_id` and `content` from request body
+3. Validate input
+4. Insert comment into database
+5. Return success response
+
+---
+
+## 💻 Backend Logic (Pseudo Code)
+
+```js
+app.post('/tips/:tip_id/comments', async (req, res) => {
+  const tip_id = req.params.tip_id;
+  const { user_id, content } = req.body;
+
+  if (!content) {
+    return res.status(400).json({ message: "Comment cannot be empty" });
+  }
+
+  // Insert into DB
+  INSERT INTO comments (tip_id, user_id, content)
+  VALUES (?, ?, ?);
+
+  res.status(201).json({ message: "Comment added successfully" });
+});
+```
+
+---
+
+## 🔍 Fetch Comments
+
+```sql
+SELECT *
+FROM comments
+WHERE tip_id = ?
+ORDER BY created_at DESC;
+```
+
+---
+
+## ⚠️ Edge Cases
+
+* Empty comment submission
+* Invalid `tip_id`
+* Unauthorized user
+* Extremely long content
+
+---
+
+## ⚡ Optimization
+
+* Index on `tip_id` → faster filtering
+* Index on `user_id` → faster user queries
+
+---
+
+## ❌ Common Mistakes
+
+* Sending `tip_id` in body instead of params
+* Not validating empty comments
+* Forgetting to sort comments
+* Over-fetching all comments on page load
+
+---
+
+## 🧠 Frontend Strategy
+
+* Fetch comments **on click (lazy loading)**
+* Maintain state as:
+
+```js
+{
+  tip_id: [comments]
+}
+```
+
+* Use `openCommentId` to toggle visibility
+
+---
+
+## 🚀 Future Enhancements
+
+* Comment likes ❤️
+* Nested replies
+* Edit / delete comments
+* User mentions
+
+---
+
+## 🧠 Memory Line
+
+Click → Fetch → Store → Show
+
+
