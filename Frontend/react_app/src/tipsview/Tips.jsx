@@ -4,6 +4,8 @@ import style from './tips.module.css';
 function Tips(){
 
     const [tips , setTips] = useState([]);
+    const [comments, setComments] = useState({});
+    const [openComment , setopenComment] = useState(null);
 
     useEffect(()=>{
         fetch("http://localhost:3000/tips")
@@ -47,6 +49,23 @@ function Tips(){
 
     };
 
+
+    const handlecommentClick= async(tip_id)=>{
+        if(openComment === tip_id){
+            setopenComment(null);
+            return;
+        }else{
+            setopenComment(tip_id);
+        }
+        const res = await fetch(`http://localhost:3000/tips/${tip_id}/comments`)
+        const fetchedComments = await res.json();
+
+        setComments(prev=>({
+            ...prev,
+            [tip_id]: fetchedComments
+        }));
+        
+    };
     
 
 
@@ -67,8 +86,23 @@ function Tips(){
                                 {tip.isLiked ? "💖" : "🤍"}
                         </button>
                         <span>{tip.likes_count}</span>
+                        <button onClick={()=>
+                            handlecommentClick(tip.tip_id)
+                        }>Comments</button>
+                        {openComment === tip.tip_id && (
+                           <div>
+                                {comments[tip.tip_id]?.length === 0 ? (
+                                    <p> NO Comments yet</p>
+                                ):(
+                                comments[tip.tip_id]?.map((c,i)=>(
+                                    <p key={i}>{c.content}</p>
+                                ))       
+                        )}
+                        </div>
+                        )}
                        </div>
                     </div>
+
                     ))
                )}
             </div>

@@ -5,6 +5,7 @@ require("dotenv").config();
 
 const userRoutes = require("./routes/userRoutes");
 const tipsRoutes = require("./routes/tipsRoutes");
+const commentsRoutes = require("./routes/commentsRoutes");
 console.log("tipsRoutes imported");
 
 
@@ -13,6 +14,7 @@ app.use(express.json());
 
 app.use("/api/users" , userRoutes);
 app.use("/tips" , tipsRoutes);
+app.use('/tips', commentsRoutes);
 
 
 app.listen(3000 , ()=>{
