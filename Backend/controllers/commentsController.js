@@ -43,17 +43,18 @@ exports.getComments = async (req,res)=>{
                 ORDER BY created_at DESC`;
 
     try{
-
+        console.log("comments before querry");
     const [result] = await db.query(sql, [tip_id]);
+    console.log("comment after query");
     if(result.length === 0){
-        res.status(201).json({
+        return res.status(200).json({
             message:"No comments yet"
         });
     }
-    res.json(result);
-    console.log("response send");
+   return res.status(200).json(result);
 }catch(err){
-    res.status(500).json({
+    console.log(err);
+    return res.status(500).json({
         message: "Server error"
     });
 }

@@ -12,16 +12,25 @@ exports.registerUser = async (req, res) => {
 
 
     const sql = "INSERT INTO users(name , email , password  , role) VALUES (? , ? , ? , ?)";
-        db.query(sql, [name, email, hashedPassword, role], (err, result) => {
+      const [result] = await  db.query(sql, [name, email, hashedPassword, role]);
 
-            res.status(201).json({
-                message: "User registered successfully"
+            return res.status(201).json({
+                message: "User registered successfully",
+                userId: result.insertId
             });
-        });
-    } catch (error) {
-        console.log(error);
-        res.send("Error inserting user");
-    }
+        }catch(error){
+            console.log(error);
+
+            if(error.code === 'ER_DUP_ENTRY'){
+                return res.status(400).json({
+                    message: "Email already exists"
+                });
+            }
+            return res.satatus(500).json({
+                message: "Server error"
+            });
+        } 
+    
 };
 
 exports.loginUser = async (req, res) => {

@@ -59,10 +59,11 @@ function Tips(){
         }
         const res = await fetch(`http://localhost:3000/tips/${tip_id}/comments`)
         const fetchedComments = await res.json();
+        console.log("Fetched Comments:" , fetchedComments);
 
         setComments(prev=>({
             ...prev,
-            [tip_id]: fetchedComments
+            [tip_id]: Array.isArray(fetchedComments)? fetchedComments : []
         }));
         
     };
@@ -91,12 +92,17 @@ function Tips(){
                         }>Comments</button>
                         {openComment === tip.tip_id && (
                            <div>
-                                {comments[tip.tip_id]?.length === 0 ? (
-                                    <p> NO Comments yet</p>
-                                ):(
-                                comments[tip.tip_id]?.map((c,i)=>(
+                                {comments[tip.tip_id] ? (
+                                comments[tip.tip_id]?.length > 0 ? (
+                                    comments[tip.tip_id]?.map((c,i)=>(
                                     <p key={i}>{c.content}</p>
-                                ))       
+                                    ))
+                                ):(
+                                 <p> NO Comments yet</p>
+                                )
+                            ):(
+                                <p>Loading comments...</p>
+                                   
                         )}
                         </div>
                         )}
