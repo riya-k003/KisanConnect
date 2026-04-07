@@ -90,6 +90,11 @@ function Tips(){
                         <button onClick={()=>
                             handlecommentClick(tip.tip_id)
                         }>Comments</button>
+                        <input 
+                        type="text"
+                        placeholder="Write a comment..."
+                        />
+                        <button>Post</button>
                         {openComment === tip.tip_id && (
                            <div>
                                 {comments[tip.tip_id] ? (
