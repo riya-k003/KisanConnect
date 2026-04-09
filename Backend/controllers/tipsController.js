@@ -22,6 +22,8 @@ exports.createTip = (req , res) =>{
 
 exports.viewTips = async (req, res)=>{
     console.log("viewTips API hit");
+    console.log("req.user:", req.user);
+    console.log("user id:", req.user?.id);
     const user_id = req.user ? req.user.id : null;
     const page = parseInt(req.query.page) || 1 ;
 
@@ -32,27 +34,38 @@ exports.viewTips = async (req, res)=>{
     const offset = (page - 1)*limit;
 
     const sql = `
-        SELECT 
+    SELECT 
         t.tip_id,
         t.title,
         t.content,
         t.category,
         t.created_at,
         u.name AS farmer_name,
-        COUNT(l.tip_id) AS likes_count,
-        COALESCE(SUM(l.user_id IS NOT NULL),0) > 0 AS isLiked
-        FROM tips t
-        JOIN users u ON t.farmer_id = u.id
-        LEFT JOIN likes l ON t.tip_id = l.tip_id AND l.user_id = ?
-        GROUP BY t.tip_id
-        ORDER BY t.tip_id DESC
-        LIMIT ? OFFSET ?
+        COUNT(DISTINCT al.user_id) AS likes_count,
+        CASE
+            WHEN ul.user_id IS NOT NULL THEN true
+            Else false
+        END AS isLiked
+    FROM tips t
+    JOIN users u ON t.farmer_id = u.id
+    LEFT JOIN likes al ON t.tip_id = al.tip_id 
+    LEFT JOIN likes ul ON t.tip_id = ul.tip_id AND ul.user_id = ?
+    GROUP BY 
+        t.tip_id,
+        t.title,
+        t.content,
+        t.category,
+        t.created_at,
+        u.name,
+        ul.user_id
+    ORDER BY t.tip_id DESC
+    LIMIT ? OFFSET ?
         `;
         try{
-    console.log("Before query");
-
         const [results] = await db.query(sql , [user_id , limit , offset]);
-            console.log("After query");
+           console.log("results:", results);
+           console.log("first result:" , results[0]);
+
            
             res.json({
                 page, 
@@ -68,7 +81,7 @@ exports.viewTips = async (req, res)=>{
 };
 
 exports.togglelike = async (req, res)=>{
-     
+     console.log("toggle api hit");
     const user_id = req.user.id;
     const tip_id = req.params.tip_id;
 

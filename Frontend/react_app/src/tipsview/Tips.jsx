@@ -8,10 +8,18 @@ function Tips(){
     const [openComment , setopenComment] = useState(null);
 
     useEffect(()=>{
-        fetch("http://localhost:3000/tips")
+        console.log("Token:", localStorage.getItem("token"));
+        fetch("http://localhost:3000/tips" , {
+            method: "GET",
+            headers :{
+                "Authorization" : `Bearer ${localStorage.getItem("token")}`
+            },
+          
+        })
         .then((res)=> res.json())
         .then((data)=> {
             console.log("DATA:" , data);
+            console.log("FIRST TIP:" , data.tips[0]);
             setTips(data.tips);
         });
     }, []);
@@ -21,6 +29,7 @@ function Tips(){
     }, [tips]);
     
     const handleClick = async (tip_id) =>{
+        console.log("like button clicked" , tip_id);
        const updatedTips = tips.map((tip)=>{
         console.log(tip.likes_count, typeof tip.like_count);
         if(tip.tip_id === tip_id){
@@ -40,8 +49,12 @@ function Tips(){
     //    calling backend
 
     try{
+        console.log("sending like request for" , tip_id);
         await fetch(`http://localhost:3000/tips/${tip_id}/like`, {
             method : "POST",
+            headers : {
+                Authorization : `Bearer ${localStorage.getItem("token")}`
+            }
         });
     }catch(err){
         console.log(err);
