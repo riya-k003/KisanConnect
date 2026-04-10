@@ -489,3 +489,157 @@ ORDER BY created_at DESC;
 Click → Fetch → Store → Show
 
 
+# 💬 Comment Feature (Tips) – Full Flow (Frontend + Backend)
+
+---
+
+## 🎯 Goal
+
+Users can:
+
+* Write a comment on a tip
+* Post it to backend
+* See it instantly under that tip
+
+---
+
+## 🧠 Core Idea
+
+Each tip has its **own input box**
+So we must store comment text **separately for each tip**
+
+---
+
+## ⚛️ Frontend State (IMPORTANT)
+
+### ❌ Wrong Approach
+
+```js
+const [comment, setComment] = useState("");
+```
+
+👉 All inputs share same value (WRONG)
+
+---
+
+### ✅ Correct Approach
+
+```js
+const [commentInput, setCommentInput] = useState({});
+```
+
+---
+
+## 🧠 State Structure
+
+```js
+{
+  tip_id: "comment text"
+}
+```
+
+Example:
+
+```js
+{
+  2: "nice tip",
+  5: "very useful"
+}
+```
+
+---
+
+## 🔑 Input Binding
+
+```jsx
+<input
+  type="text"
+  placeholder="Write a comment..."
+  value={commentInput[tip.tip_id] || ""}
+  onChange={(e) => {
+    setCommentInput({
+      ...commentInput,
+      [tip.tip_id]: e.target.value
+    });
+  }}
+/>
+```
+
+---
+
+## 🧠 What is happening
+
+* `tip.tip_id` → identifies tip
+* `e.target.value` → user input
+* `[tip.tip_id]` → stores text for that specific tip
+
+---
+
+## 🔄 Post Comment Flow
+
+```text
+User types → Click Post → Send request → Backend saves → UI updates
+```
+
+---
+
+## 📡 API Call (Frontend)
+
+```js
+fetch(`http://localhost:3000/tips/${tip_id}/comments`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`
+  },
+  body: JSON.stringify({
+    content: commentInput[tip_id]
+  })
+});
+```
+
+---
+
+## ⚠️ Important Rules
+
+* Always send **token** (protected route)
+* Never send `user_id` from frontend
+* Backend gets `user_id` from token
+
+---
+
+## ⚙️ Backend Flow (Correct)
+
+1. Get `tip_id` from params
+2. Get `user_id` from `req.user`
+3. Get `content` from body
+4. Validate input
+5. Insert into DB
+
+---
+
+## ❌ Common Mistake (YOU FIXED THIS IN LIKE)
+
+👉 Forgetting token in request
+
+Result:
+
+* Middleware blocks request
+* DB not updated
+* UI breaks after refresh
+
+---
+
+## 🧠 Final Memory Line
+
+👉 "Each tip has its own comment stored using tip_id as key"
+
+---
+
+## 🚀 Flow Summary
+
+```text
+Input → State → API → Middleware → Controller → DB → Response → UI
+```
+
+---
