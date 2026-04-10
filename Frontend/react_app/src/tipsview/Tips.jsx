@@ -1,9 +1,11 @@
 import {useEffect , useState} from 'react';
+import {useNavigate} from "react-router-dom";
 import style from './tips.module.css';
 
 function Tips(){
 
     const [tips , setTips] = useState([]);
+    const navigate = useNavigate();
     const [comments, setComments] = useState({});
     const [openComment , setopenComment] = useState(null);
 
@@ -16,11 +18,18 @@ function Tips(){
             },
           
         })
-        .then((res)=> res.json())
+        .then((res)=> {
+            if(res.status === 401){
+                localStorage.removeItem("token");
+                navigate("/");
+                return;
+            }
+            return res.json();
+        })
         .then((data)=> {
-            console.log("DATA:" , data);
-            console.log("FIRST TIP:" , data.tips[0]);
+            if(data){
             setTips(data.tips);
+            }
         });
     }, []);
 
