@@ -8,6 +8,11 @@ function Tips(){
     const navigate = useNavigate();
     const [comments, setComments] = useState({});
     const [openComment , setopenComment] = useState(null);
+    const [TipData , setTipData] = useState({
+        title : "",
+        category : "",
+        content :""
+    })
 
     useEffect(()=>{
         console.log("Token:", localStorage.getItem("token"));
@@ -89,6 +94,30 @@ function Tips(){
         }));
         
     };
+
+    const handleChange =(e) =>{
+        setTipData({
+        ...TipData,
+        [e.target.name] : e.target.value
+       });
+    }
+
+    const handlePostTip = async()=>{
+        try{
+            const res = await fetch("http://localhost:3000/tips", {
+                method : "POST",
+                headers :{
+                    "Content-Type" : "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                },
+                body : JSON.stringify(TipData)
+            });
+            const data = await res.json();
+            console.log(data);
+        }catch(error){
+            console.log("Error posting tip" , error);
+        }
+    };
     
 
 
@@ -140,7 +169,29 @@ function Tips(){
                )}
             </div>
         </div>
-        
+        <div className="createTip">
+            <input
+            name="title"
+             type = "text" 
+            placeholder="Tip Title"
+            value ={TipData.title}
+            onChange={handleChange} 
+            />
+            <input 
+            name ="category"
+            type="text"  
+            placeholder="Category"
+            value={TipData.category}
+            onChange={handleChange}
+            />
+            <textarea
+            name="content"  
+            placeholder= " Tip content"
+            value={TipData.content}
+            onChange={handleChange}>
+            </textarea>
+            <button onClick={handlePostTip}>POST</button>
+        </div>
         </>
     )
     
