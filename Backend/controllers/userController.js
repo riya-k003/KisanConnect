@@ -26,7 +26,7 @@ exports.registerUser = async (req, res) => {
                     message: "Email already exists"
                 });
             }
-            return res.satatus(500).json({
+            return res.status(500).json({
                 message: "Server error"
             });
         } 

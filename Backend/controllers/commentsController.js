@@ -3,7 +3,8 @@ const db = require("../config/db");
 exports.createComment = async (req , res)=>{
     const tip_id = req.params.tip_id;
 
-    const {user_id , content} = req.body;
+    const {content} = req.body;
+    const user_id = req.user.id;
 
      if(!content || content.trim() === ""){
             return res.status(400).json({

@@ -13,6 +13,9 @@ function Tips(){
         category : "",
         content :""
     })
+    const [commentData , setCommentData] = useState({
+        content: ""
+    })
 
     useEffect(()=>{
         console.log("Token:", localStorage.getItem("token"));
@@ -101,6 +104,12 @@ function Tips(){
         [e.target.name] : e.target.value
        });
     }
+    const handleCommChange =(e) =>{
+        setCommentData({
+        ...commentData,
+        [e.target.name] : e.target.value
+       });
+    }
 
     const handlePostTip = async()=>{
         try{
@@ -116,6 +125,24 @@ function Tips(){
             console.log(data);
         }catch(error){
             console.log("Error posting tip" , error);
+        }
+    };
+
+    const handleCommentPost = async(tip_id)=>{
+        try{
+            const res = await fetch(`http://localhost:3000/tips/${tip_id}/comments`,{
+                method : "POST",
+                headers:{
+                    "Content-Type" : "application/json",
+                    Authorization : `Bearer ${localStorage.getItem("token")}`
+                },
+                body : JSON.stringify(commentData),
+            });
+            const data =await res.json();
+            console.log(data);
+            
+        }catch(error){
+            console.log("Error posting comment", error);
         }
     };
     
@@ -143,9 +170,12 @@ function Tips(){
                         }>Comments</button>
                         <input 
                         type="text"
+                        name="content"
                         placeholder="Write a comment..."
+                        value={commentData.content}
+                        onChange={handleCommChange}
                         />
-                        <button>Post</button>
+                        <button onClick={()=>handleCommentPost(tip.tip_id)}>Post</button>
                         {openComment === tip.tip_id && (
                            <div>
                                 {comments[tip.tip_id] ? (
