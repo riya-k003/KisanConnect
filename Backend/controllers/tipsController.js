@@ -15,9 +15,18 @@ exports.createTip = (req , res) =>{
             })
         }
         res.status(201).json({
-            message: "Tip created successfully"
-        })
-    })
+            message: "Tip created successfully",
+            tip:{
+                tip_id : result.insertId,
+                title,
+                content,
+                category,
+                farmer_id,
+                likes_count:0,
+                isLiked:false
+            }
+        });
+    });
 };
 
 exports.viewTips = async (req, res)=>{
