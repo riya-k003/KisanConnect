@@ -118,9 +118,15 @@ function Tips() {
       ...prev,
       [tip_id]: Array.isArray(fetchedComments) ? fetchedComments : [],
     }));
+   if(res.ok){
+    setCommentData({
+
+    })
+   }
+
   };
 
-  const handleChange = (e, type) => {
+  const handleChange = (e, tip_id = "null" ,  type = "tip") => {
     const { name, value } = e.target;
 
     if (type === "tip") {
@@ -131,14 +137,36 @@ function Tips() {
     } else if (type === "comment") {
       setCommentData({
         ...commentData,
-        [name]: value,
+        [tip_id]: value,
       });
     }
   };
 
   const handlePostTip = async () => {
+      const trimmedTitle = TipData.title.trim();
+  const trimmedCategory = TipData.category.trim();
+  const trimmedContent = TipData.content.trim();
+
+  if (!trimmedTitle || !trimmedCategory || !trimmedContent) {
+    alert("All fields are required");
+    return;
+  }
+
+  if (/^\d+$/.test(trimmedTitle)) {
+    alert("Title cannot contain only numbers");
+    return;
+  }
+
+  if (trimmedTitle.length < 3) {
+    alert("Title must be at least 3 characters");
+    return;
+  }
+
+  if (trimmedContent.length < 10) {
+    alert("Content must be at least 10 characters");
+    return;
+  }
     try {
-        console.log("Posting tip...", TipData);
 
       const res = await fetch("http://localhost:3000/tips", {
         method: "POST",
@@ -149,24 +177,24 @@ function Tips() {
         body: JSON.stringify(TipData),
       });
 
-       console.log("POST status:", res.status);
 
-      const data = await res.json();
+      let data;
+try {
+  data = await res.json();
+} catch (err) {
+  data = { message: "Something went wrong" };
+}
 
-        console.log("POST response data:", data);
-
-      if (res.ok) {
-        setTips((prev) =>{
-          const updated = [data.tip, ...prev];
-          return updated;
-        });
-
+if (!res.ok) {
+  alert(data.message || "Request failed");
+  return;
+}
+   setTips((prev) => [data.tip, ...prev]);
         setTipData({
           title: "",
           category: "",
           content: "",
         });
-      }
     } catch (error) {
       console.log("Error posting tip", error);
     }
@@ -185,6 +213,10 @@ function Tips() {
       });
       const data = await res.json();
       console.log(data);
+      // if(res.ok){
+       setCommentData({
+      content: ""   });
+      //  }
     } catch (error) {
       console.log("Error posting comment", error);
     }
@@ -215,9 +247,9 @@ function Tips() {
                     type="text"
                     name="content"
                     placeholder="Write a comment..."
-                    value={commentData.content}
+                    value={commentData[tip.tip_id] || ""}
                     onChange={(e) => {
-                      handleChange(e, "comment");
+                      handleChange(e, tip.tip_id, "comment");
                     }}
                   />
                   <button onClick={() => handleCommentPost(tip.tip_id)}>

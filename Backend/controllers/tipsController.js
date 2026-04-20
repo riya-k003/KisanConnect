@@ -4,10 +4,49 @@ exports.createTip = (req , res) =>{
 
     const {title , content , category} = req.body;
 
+    if (
+    typeof title !== "string" ||
+    typeof content !== "string" ||
+    typeof category !== "string"
+  ) {
+    return res.status(400).json({
+      message: "Title, content, and category must be strings",
+    });
+  }
+
+    
+    const trimmedTitle = title?.trim();
+const trimmedContent = content?.trim();
+const trimmedCategory = category?.trim();
+
+if (!trimmedTitle || !trimmedContent || !trimmedCategory) {
+    return res.status(400).json({
+        message: "All fields are required"
+    });
+}
+
+if (/^\d+$/.test(trimmedTitle)) {
+    return res.status(400).json({
+      message: "Title cannot contain only numbers",
+    });
+  }
+
+if (trimmedTitle.length < 3) {
+    return res.status(400).json({
+        message: "Title must be at least 3 characters"
+    });
+}
+
+if (trimmedContent.length < 10) {
+    return res.status(400).json({
+        message: "Content must be at least 10 characters"
+    });
+}
+
     const farmer_id = req.user.id;
 
     const sql = "INSERT INTO tips (title , content , category , farmer_id) VALUES (? , ? , ? , ?)";
-    db.query(sql , [title , content , category , farmer_id] , (err , result) =>{
+    db.query(sql , [trimmedTitle , trimmedContent , trimmedCategory , farmer_id] , (err , result) =>{
         
         if(err){
             return res.status(500).json({
@@ -18,9 +57,9 @@ exports.createTip = (req , res) =>{
             message: "Tip created successfully",
             tip:{
                 tip_id : result.insertId,
-                title,
-                content,
-                category,
+                title: trimmedTitle,
+                content : trimmedContent,
+                category : trimmedCategory,
                 farmer_id,
                 likes_count:0,
                 isLiked:false
