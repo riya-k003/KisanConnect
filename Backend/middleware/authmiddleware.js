@@ -5,7 +5,9 @@ exports.verifyToken = (req,res, next)=>{
     const authHeader = req.headers.authorization;
 
     if(!authHeader){
-        return res.send("Access Denied , No Token provided");
+        return res.status(401).json({
+            message: "Access denied, No token provided"
+        });
     }
 
     const token = authHeader.split(" ")[1];
@@ -17,6 +19,8 @@ exports.verifyToken = (req,res, next)=>{
         req.user = decoded;
         next();
     }catch(error){
-        res.send("Invalid Token");
+        return res.status(401).json({
+            message: "Token expired or invalid"
+        })
     }
 };

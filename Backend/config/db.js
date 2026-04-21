@@ -4,15 +4,21 @@ const db =  mysql.createPool({
     host:'localhost',
     user:'root',
     password: '0330',
-    database:'KisanConnect'
+    database:'KisanConnect',
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
-// db.connect((err) => {
-//     if (err) {
-//         console.error("Database connection failed:", err);
-//         return;
-//     }
-    console.log("Database connected");
-// });
+
+db.on('connection', (connection) => {
+    console.log('Database connection established as id ' + connection.threadId);
+});
+
+db.on('error', (err) => {
+    console.error('Database pool error:', err);
+});
+
+console.log("Database connected");
 
 
 module.exports = db;

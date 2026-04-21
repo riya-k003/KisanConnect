@@ -2,6 +2,9 @@ const db = require("../config/db")
 
 exports.createTip = (req , res) =>{
 
+    console.log("createTip called with body:", req.body);
+    console.log("User from token:", req.user);
+
     const {title , content , category} = req.body;
 
     if (
@@ -46,26 +49,35 @@ if (trimmedContent.length < 10) {
     const farmer_id = req.user.id;
 
     const sql = "INSERT INTO tips (title , content , category , farmer_id) VALUES (? , ? , ? , ?)";
-    db.query(sql , [trimmedTitle , trimmedContent , trimmedCategory , farmer_id] , (err , result) =>{
-        
-        if(err){
-            return res.status(500).json({
+    console.log("About to execute SQL:", sql, "with values:", [trimmedTitle , trimmedContent , trimmedCategory , farmer_id]);
+    
+    const queryPromise = db.query(sql , [trimmedTitle , trimmedContent , trimmedCategory , farmer_id]);
+    const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Database query timeout')), 5000)
+    );
+    
+    Promise.race([queryPromise, timeoutPromise])
+        .then(([result]) => {
+            console.log("Database insert successful, result:", result);
+            res.status(201).json({
+                message: "Tip created successfully",
+                tip:{
+                    tip_id : result.insertId,
+                    title: trimmedTitle,
+                    content : trimmedContent,
+                    category : trimmedCategory,
+                    farmer_id,
+                    likes_count:0,
+                    isLiked:false
+                }
+            });
+        })
+        .catch((err) => {
+            console.log("Database error:", err);
+            res.status(500).json({
                 message: "Error creating tip"
-            })
-        }
-        res.status(201).json({
-            message: "Tip created successfully",
-            tip:{
-                tip_id : result.insertId,
-                title: trimmedTitle,
-                content : trimmedContent,
-                category : trimmedCategory,
-                farmer_id,
-                likes_count:0,
-                isLiked:false
-            }
+            });
         });
-    });
 };
 
 exports.viewTips = async (req, res)=>{
@@ -121,7 +133,8 @@ exports.viewTips = async (req, res)=>{
             });
         }catch(err){
             console.log("DB ERROR:" , err);
-            res.status(500).json({
+            console.log(res);
+            res.status(401).json({
                 message: "server error"
             });
         }

@@ -16,6 +16,7 @@ function Tips() {
     content: "",
   });
   const [loading , setLoading] = useState(true);
+  const [Error , setError] = useState("");
 
   useEffect(() => {
     console.log("Token:", localStorage.getItem("token"));
@@ -25,8 +26,10 @@ function Tips() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
+    
       .then((res) => {
-        if (res.status === 401 || res.status === 403) {
+        console.log(res);
+        if (res.status === 403 || res.status === 401) {
           localStorage.removeItem("token");
           navigate("/");
           return ;
@@ -70,6 +73,7 @@ function Tips() {
       setTips(data.tips);
     } catch (err) {
       console.log("fetchTips error" , err);
+      setError("Something went wrong while fetching the tips");
     }
   };
   const handleClick = async (tip_id) => {
@@ -126,48 +130,59 @@ function Tips() {
 
   };
 
-  const handleChange = (e, tip_id = "null" ,  type = "tip") => {
-    const { name, value } = e.target;
-
-    if (type === "tip") {
-      setTipData({
-        ...TipData,
-        [name]: value,
-      });
-    } else if (type === "comment") {
-      setCommentData({
-        ...commentData,
-        [tip_id]: value,
-      });
-    }
+  const handleChange = (e) => {
+    setError("");
+    const {name , value} = e.target;
+        setCommentData({
+      ...commentData,
+      [name] : value
+    });
+  
   };
 
+const handleTipChange =(e)=>{
+  console.log("handleTipChange triggered:", e.target.name, e.target.value);
+  setError("");
+  const {name , value} = e.target;
+  setTipData({
+    ...TipData,
+    [name]:value
+  })
+}
   const handlePostTip = async () => {
+      console.log("handlePostTip called with TipData:", TipData);
       const trimmedTitle = TipData.title.trim();
   const trimmedCategory = TipData.category.trim();
   const trimmedContent = TipData.content.trim();
 
   if (!trimmedTitle || !trimmedCategory || !trimmedContent) {
-    alert("All fields are required");
+    setError("All fields are required");
     return;
   }
 
   if (/^\d+$/.test(trimmedTitle)) {
-    alert("Title cannot contain only numbers");
+    setError("Title cannot contain only numbers");
     return;
   }
 
   if (trimmedTitle.length < 3) {
-    alert("Title must be at least 3 characters");
+    setError("Title must be at least 3 characters");
     return;
   }
 
   if (trimmedContent.length < 10) {
-    alert("Content must be at least 10 characters");
+    setError("Content must be at least 10 characters");
     return;
   }
     try {
 
+      console.log("Sending POST request to /tips");
+      console.log("Request body:", JSON.stringify(TipData));
+      console.log("Token from localStorage:", localStorage.getItem("token"));
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      
       const res = await fetch("http://localhost:3000/tips", {
         method: "POST",
         headers: {
@@ -175,7 +190,11 @@ function Tips() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(TipData),
+        signal: controller.signal,
       });
+      
+      clearTimeout(timeoutId);
+      console.log("Response received:", res);
 
 
       let data;
@@ -185,18 +204,31 @@ try {
   data = { message: "Something went wrong" };
 }
 
+console.log("POST status:", res.status);
+    console.log("res.ok:", res.ok);
+    console.log("response data:", data);
 if (!res.ok) {
-  alert(data.message || "Request failed");
+  setError(data.message || "Request failed");
   return;
 }
-   setTips((prev) => [data.tip, ...prev]);
-        setTipData({
-          title: "",
-          category: "",
-          content: "",
-        });
+      
+      setError("");
+      if (data.tip) {
+        setTips((prev) => [data.tip, ...prev]);
+      }
+      console.log("RESETTING FORM NOW");
+      setTipData({
+        title: "",
+        category: "",
+        content: "",
+      });
     } catch (error) {
       console.log("Error posting tip", error);
+      if (error.name === 'AbortError') {
+        setError("Request timed out. Please try again.");
+      } else {
+        setError("Something went wrong while posting the comment");
+      }
     }
 
   };
@@ -219,6 +251,7 @@ if (!res.ok) {
       //  }
     } catch (error) {
       console.log("Error posting comment", error);
+      setError("Something went wrong while posting the comment");
     }
   };
 
@@ -277,31 +310,27 @@ if (!res.ok) {
         </div>
       </div>
       <div className="createTip">
+      {Error && <p className={style.errorBox}>⚠️{Error}</p>}
         <input
           name="title"
           type="text"
           placeholder="Tip Title"
           value={TipData.title}
-          onChange={(e) => {
-            handleChange(e, "tip");
-          }}
+          onChange={handleTipChange}
         />
         <input
           name="category"
           type="text"
           placeholder="Category"
           value={TipData.category}
-          onChange={(e) => {
-            handleChange(e, "tip");
-          }}
+          onChange={handleTipChange}
         />
         <textarea
           name="content"
           placeholder=" Tip content"
           value={TipData.content}
-          onChange={(e) => {
-            handleChange(e, "tip");
-          }}
+          onChange={handleTipChange}
+        
         ></textarea>
         <button onClick={handlePostTip}>POST</button>
       </div>
