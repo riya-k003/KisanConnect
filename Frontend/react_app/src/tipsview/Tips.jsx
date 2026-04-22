@@ -255,6 +255,29 @@ if (!res.ok) {
     }
   };
 
+  const handleDelete = async(tip_id)=>{
+    try{
+      console.log("Sending DELETE request for tip_id:" , tip_id);
+      const res = await fetch(`http://localhost:3000/tips/${tip_id}` , {
+        method : "DELETE",
+        headers : {
+          Authorization : `Bearer ${localStorage.getItem("token")}`
+        },
+      });
+      const data = await res.json();
+      if(!res.ok){
+        setError(data.message || "Failed to delete the tip");
+        return;
+      }
+      setTips(prev => prev.filter(t=> t.tip_id !== tip_id));
+      setError("");
+      
+    } catch(err){
+      console.log("Error deleting tip" , err);
+      setError("Something went Wrong while deleting the tip")
+    }
+  }
+
   return (
     <>
       <div className={style.container}>
@@ -267,6 +290,7 @@ if (!res.ok) {
             tips.map((tip) => (
               <div key={tip.tip_id} className={style.tipBox}>
                 <h3 className={style.title}>{tip.title}</h3>
+                <button className={style.deleteBtn} onClick={()=>handleDelete(tip.tip_id)}>🗑️</button>
                 <p className={style.content}>{tip.content}</p>
                 <div className={style.likes}>
                   <button onClick={() => handleClick(tip.tip_id)}>

@@ -49,7 +49,6 @@ if (trimmedContent.length < 10) {
     const farmer_id = req.user.id;
 
     const sql = "INSERT INTO tips (title , content , category , farmer_id) VALUES (? , ? , ? , ?)";
-    console.log("About to execute SQL:", sql, "with values:", [trimmedTitle , trimmedContent , trimmedCategory , farmer_id]);
     
     const queryPromise = db.query(sql , [trimmedTitle , trimmedContent , trimmedCategory , farmer_id]);
     const timeoutPromise = new Promise((_, reject) => 
@@ -81,9 +80,6 @@ if (trimmedContent.length < 10) {
 };
 
 exports.viewTips = async (req, res)=>{
-    console.log("viewTips API hit");
-    console.log("req.user:", req.user);
-    console.log("user id:", req.user?.id);
     const user_id = req.user ? req.user.id : null;
     const page = parseInt(req.query.page) || 1 ;
 
@@ -184,4 +180,39 @@ exports.togglelike = async (req, res)=>{
         message: "Server error"
     });
  }
+};
+
+exports.deleteTip =  async(req , res)=>{
+    console.log("delete tip called with the params:" , req.params);
+    console.log("Types of param", typeof req.params.tip_id);
+    const tip_id = parseInt(req.params.tip_id, 10);
+    const farmer_id = req.user.id;
+
+    console.log("Delete tip called with farmer_id and tip_id:" , farmer_id , tip_id);
+    console.log("Types - farmer_id:", typeof farmer_id, "tip_id:", typeof tip_id);
+
+    const sql = "DELETE FROM tips WHERE farmer_id = ? AND tip_id =?;"
+    const queryPromise = db.query(sql , [farmer_id , tip_id]);
+    const timeoutPromise = new Promise((_ , reject)=>
+        setTimeout(()=> reject(new Error("Database query timeout")), 5000)
+);
+
+    try{
+        const [result] = await Promise.race([queryPromise , timeoutPromise]);
+        console.log("Delete result:", result);
+            if(result.affectedRows === 0){
+                return res.status(404).json({
+                    message: "Tip not found or you don't have permission to delete this tip"
+                });
+            }
+           return res.status(200).json({
+            message: "Tip deleted successfully",
+            });
+
+        } catch(err) {
+            console.log("Delete error:", err);
+            return res.status(500).json({
+              message: "Server error"
+            });
+        }
 };
