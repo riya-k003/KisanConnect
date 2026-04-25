@@ -2,8 +2,9 @@ const db = require("../config/db");
 
 exports.createComment = async (req , res)=>{
     const tip_id = req.params.tip_id;
-
+    
     const {content} = req.body;
+    console.log("content:" , content);
     const user_id = req.user.id;
 
      if(!content || content.trim() === ""){

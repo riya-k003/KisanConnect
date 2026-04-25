@@ -130,18 +130,18 @@ function Tips() {
 
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e , tip_id) => {
+    console.log("handlChange is hit with event name:" , e.target.name , "and value:" , e.target.value);
     setError("");
-    const {name , value} = e.target;
+    const value = e.target.value
         setCommentData({
       ...commentData,
-      [name] : value
+      [tip_id] : value
     });
   
   };
 
-const handleTipChange =(e)=>{
-  console.log("handleTipChange triggered:", e.target.name, e.target.value);
+  const handleTipChange =(e)=>{
   setError("");
   const {name , value} = e.target;
   setTipData({
@@ -174,12 +174,8 @@ const handleTipChange =(e)=>{
     setError("Content must be at least 10 characters");
     return;
   }
+  
     try {
-
-      console.log("Sending POST request to /tips");
-      console.log("Request body:", JSON.stringify(TipData));
-      console.log("Token from localStorage:", localStorage.getItem("token"));
-      
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
       
@@ -234,6 +230,7 @@ if (!res.ok) {
   };
 
   const handleCommentPost = async (tip_id) => {
+    console.log("comment post clicked with commentdata:" , commentData , " for tip_id:" , tip_id);
     try {
       const res = await fetch(`http://localhost:3000/tips/${tip_id}/comments`, {
         method: "POST",
@@ -241,13 +238,15 @@ if (!res.ok) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify(commentData),
+        body: JSON.stringify({ content: commentData[tip_id] || "" }),
       });
       const data = await res.json();
       console.log(data);
       // if(res.ok){
        setCommentData({
-      content: ""   });
+      ...commentData,
+      [tip_id]: ""
+    });
       //  }
     } catch (error) {
       console.log("Error posting comment", error);
@@ -278,6 +277,31 @@ if (!res.ok) {
     }
   }
 
+  function timeAgo(dateString){
+    const now = new Date();
+    const past = new Date(dateString);
+
+    const seconds = Math.floor((now-past)/1000);
+
+    if(seconds < 60){
+      return `${seconds} s ago`;
+    }
+    const minutes = Math.floor(seconds/60);
+    if(minutes<60){
+      return `${minutes} m ago`;
+    }
+     const hours = Math.floor(minutes/60);
+     if(hours < 24){
+      return `${hours} h ago`;
+     }
+     const days = Math.floor(hours/24);
+     if(days < 7){
+     return `${days} d ago`;
+     }
+     const weeks = Math.floor(days/7);
+      return `${weeks} w ago`;
+  }
+
   return (
     <>
       <div className={style.container}>
@@ -289,6 +313,10 @@ if (!res.ok) {
           ) :(
             tips.map((tip) => (
               <div key={tip.tip_id} className={style.tipBox}>
+                <div className ={style.tipHeader}>
+                  <p className={style.farmerName}>{tip.farmer_name}</p>
+                  <span className={style.time}>{timeAgo(tip.created_at)}</span>
+                  </div>
                 <h3 className={style.title}>{tip.title}</h3>
                 <button className={style.deleteBtn} onClick={()=>handleDelete(tip.tip_id)}>🗑️</button>
                 <p className={style.content}>{tip.content}</p>
@@ -305,9 +333,7 @@ if (!res.ok) {
                     name="content"
                     placeholder="Write a comment..."
                     value={commentData[tip.tip_id] || ""}
-                    onChange={(e) => {
-                      handleChange(e, tip.tip_id, "comment");
-                    }}
+                    onChange={(e) => handleChange(e , tip.tip_id)}
                   />
                   <button onClick={() => handleCommentPost(tip.tip_id)}>
                     Post
@@ -332,7 +358,7 @@ if (!res.ok) {
             ))
           )}
         </div>
-      </div>
+        </div>
       <div className="createTip">
       {Error && <p className={style.errorBox}>⚠️{Error}</p>}
         <input
