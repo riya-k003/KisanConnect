@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes , Route} from "react-router-dom";
 import Tips from "./tipsview/Tips";
-import Login from "./signup/Login";
+import Authpage from "./Authpage";
 import ProtectedRoute from "./ProtectedRoute";
 import "./index.css";
 function App() {
@@ -13,7 +13,7 @@ function App() {
         </header>
       <div className="page-content">
     <Routes>
-      <Route path="/" element={<Login/>}/>
+      <Route path="/" element={<Authpage/>}/>
       <Route path="/tips" element={
         <ProtectedRoute>
           <Tips/>
