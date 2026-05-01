@@ -8,8 +8,8 @@ KisanConnect is a full-stack web platform where farmers can share practical farm
 
 ## 🎥 Demo
 
-🚀 Live Demo: (add later)
-📸 Screenshots: (add later)
+🚀 Live Demo: 
+📸 Screenshots: 
 
 ---
 
