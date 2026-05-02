@@ -11,7 +11,7 @@ function App() {
       {/* <header>
         <h1 className="head">KisanConnect</h1>
         </header> */}
-      <div className="border border-red-500">
+      <div className="min-h-screen bg-[#F5F5F5]">
     <Routes>
       <Route path="/" element={<Authpage/>}/>
       <Route path="/tips" element={
