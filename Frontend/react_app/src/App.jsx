@@ -8,10 +8,10 @@ function App() {
 
   return (
     <BrowserRouter>
-      <header>
+      {/* <header>
         <h1 className="head">KisanConnect</h1>
-        </header>
-      <div className="page-content">
+        </header> */}
+      <div className="border border-red-500">
     <Routes>
       <Route path="/" element={<Authpage/>}/>
       <Route path="/tips" element={
