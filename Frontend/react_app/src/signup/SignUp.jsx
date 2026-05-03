@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {authServices} from "../services/authServices";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -16,13 +17,7 @@ function SignUp() {
     e.preventDefault();
     setError("");
     try {
-      const response = await fetch("http://localhost:3000/api/users/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      const data = await response.json();
-      if (!response.ok) { setError(data.message); return; }
+      await authServices.register(formData);
       navigate("/tips");
     } catch (error) {
       console.log(error);
