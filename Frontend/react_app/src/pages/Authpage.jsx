@@ -1,6 +1,6 @@
 import { useState } from "react";
-import LoginForm from "./signup/login";
-import SignUpForm from "./signup/SignUp";
+import LoginForm from "../components/auth/Login";
+import SignUpForm from "../signup/SignUp";
 
 const voices = [
   {
@@ -39,7 +39,7 @@ function AuthPage() {
   return (
     <div className="h-screen w-full grid grid-cols-[1.1fr_1fr] border ">
      {/* left pannel */}
-      <div className="relative hidden md:flex flex-col bg-[#1A4331] p-15 overflow-hidden py-16 justify-between items-center">
+      <div className="relative hidden md:flex flex-col bg-[#1A4331] p-15 overflow-hidden py-16 justify-between ">
         {/* Background image */}
          <img
     src="https://images.pexels.com/photos/29039800/pexels-photo-29039800.jpeg?auto=compress&w=900"

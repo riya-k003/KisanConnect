@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes , Route} from "react-router-dom";
 import Tips from "./tipsview/Tips";
-import Authpage from "./Authpage";
-import ProtectedRoute from "./ProtectedRoute";
+import Authpage from "./pages/Authpage";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 import "./index.css";
 function App() {
   
