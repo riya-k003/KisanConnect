@@ -20,7 +20,7 @@ function Tips() {
 
   useEffect(() => {
     console.log("Token:", localStorage.getItem("token"));
-    fetch("http://localhost:3000/tips", {
+    fetch(`${import.meta.env.VITE_API_URL}/tips`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -58,7 +58,7 @@ function Tips() {
 
           console.log("fetchTips called");
 
-      const res = await fetch(`http://localhost:3000/tips`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/tips`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -96,7 +96,7 @@ function Tips() {
 
     try {
       console.log("sending like request for", tip_id);
-      await fetch(`http://localhost:3000/tips/${tip_id}/like`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/tips/${tip_id}/like`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -114,7 +114,7 @@ function Tips() {
     } else {
       setopenComment(tip_id);
     }
-    const res = await fetch(`http://localhost:3000/tips/${tip_id}/comments`);
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/tips/${tip_id}/comments`);
     const fetchedComments = await res.json();
     console.log("Fetched Comments:", fetchedComments);
 
@@ -179,7 +179,7 @@ function Tips() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
       
-      const res = await fetch("http://localhost:3000/tips", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/tips`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -232,7 +232,7 @@ if (!res.ok) {
   const handleCommentPost = async (tip_id) => {
     console.log("comment post clicked with commentdata:" , commentData , " for tip_id:" , tip_id);
     try {
-      const res = await fetch(`http://localhost:3000/tips/${tip_id}/comments`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/tips/${tip_id}/comments`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -257,7 +257,7 @@ if (!res.ok) {
   const handleDelete = async(tip_id)=>{
     try{
       console.log("Sending DELETE request for tip_id:" , tip_id);
-      const res = await fetch(`http://localhost:3000/tips/${tip_id}` , {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/tips/${tip_id}` , {
         method : "DELETE",
         headers : {
           Authorization : `Bearer ${localStorage.getItem("token")}`
