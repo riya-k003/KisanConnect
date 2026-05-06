@@ -1,6 +1,6 @@
 import { useState } from "react";
 import LoginForm from "../components/auth/Login";
-import SignUpForm from "../signup/SignUp";
+import SignUpForm from "../components/auth/SignUp";
 
 const voices = [
   {

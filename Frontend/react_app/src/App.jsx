@@ -1,8 +1,7 @@
 import { BrowserRouter, Routes , Route} from "react-router-dom";
-import Tips from "./tipsview/Tips";
+import Tips from "./pages/TipsPage.jsx";
 import Authpage from "./pages/Authpage";
 import ProtectedRoute from "./components/common/ProtectedRoute";
-import "./index.css";
 function App() {
   
 
@@ -16,7 +15,7 @@ function App() {
       <Route path="/" element={<Authpage/>}/>
       <Route path="/tips" element={
         <ProtectedRoute>
-          <Tips/>
+          <TipsPage/>
         </ProtectedRoute>
       }
       />
