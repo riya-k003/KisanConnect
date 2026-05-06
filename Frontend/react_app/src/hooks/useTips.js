@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {tipServices} from "../services/tipServices";
-import {validateTip} from "../utlis/validateTip";
+import {tipServices} from "../services/tipService";
+import {validateTip} from "../utils/validateTip";
 
 export function useTips(){
     const [tips, setTips] = useState([]);
