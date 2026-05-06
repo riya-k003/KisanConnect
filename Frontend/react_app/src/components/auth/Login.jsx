@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import {authServices} from "../../services/authService";
+import {authService} from "../../services/authService";
 function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -13,7 +13,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await authServices.login(formData);
+      const data = await authService.login(formData);
       localStorage.setItem("token", data.token);
       navigate("/tips");
     } catch (error) {

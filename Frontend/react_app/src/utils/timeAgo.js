@@ -1,7 +1,7 @@
 
 export const timeAgo = (date)=> {
     const now = new Date();
-    const past = new Date(dateString);
+    const past = new Date(date);
 
     const seconds = Math.floor((now-past)/1000);
 

@@ -25,7 +25,9 @@ export const tipsService = {
     },
     
 
-    deleteTip : (id) => apiRequest(`/api/tips/${id}` , "DELETE"),
+    deleteTip : (id) => apiRequest(`/tips/${id}` , "DELETE"),
+    
+    likeTip : (id) => apiRequest(`/tips/${id}/like` , "POST"),
     
     getComments : (id) => apiRequest(`/tips/${id}/comments` , "GET"),
 

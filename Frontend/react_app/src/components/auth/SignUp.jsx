@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {authServices} from "../../services/authService";
+import {authService} from "../../services/authService";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ function SignUp() {
     e.preventDefault();
     setError("");
     try {
-      await authServices.register(formData);
+      await authService.register(formData);
       navigate("/tips");
     } catch (error) {
       console.log(error);

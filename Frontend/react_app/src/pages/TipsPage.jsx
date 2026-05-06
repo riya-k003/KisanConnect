@@ -21,9 +21,9 @@ function TipsPage() {
 
   return (
     <>
-      <div className="style.container">
+      <div className="container">
         <div>
-          {Loading ? (
+          {loading ? (
             <p>Loading...</p>
           ) : tips.length === 0 ? (
             <p>No tips available</p>
@@ -44,7 +44,7 @@ function TipsPage() {
             ))
           )}
         </div>
-        {error && <p style={{ color: red }}> ⚠️ {error}</p>}
+        {error && <p style={{ color: "red" }}> ⚠️ {error}</p>}
 
         <TipForm onSubmit={handlePostTip} error={error} setError={setError} />
       </div>

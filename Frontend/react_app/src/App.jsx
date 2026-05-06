@@ -1,10 +1,11 @@
 import { BrowserRouter, Routes , Route} from "react-router-dom";
-import Tips from "./pages/TipsPage.jsx";
-import Authpage from "./pages/Authpage";
+import TipsPage from "./pages/TipsPage.jsx";
+import Authpage from "./pages/Authpage.jsx";
 import ProtectedRoute from "./components/common/ProtectedRoute";
+
+
 function App() {
   
-
   return (
     <BrowserRouter>
       {/* <header>

@@ -1,12 +1,12 @@
-import { apiRequest } from "./api.js";
+import { apiRequest } from "./api";
 
-export const authServices ={
+export const authService ={
     register : async (formData) =>{
         return apiRequest("/api/users/register" , "POST" , formData);
     },
 
-    login : async (fromData)=>{
-        return apiRequest("/api/users/login" , "POST" , fromData);
+    login : async (formData)=>{
+        return apiRequest("/api/users/login" , "POST" , formData);
     },
     logout : async ()=>{
         localStorage.removeItem("token");

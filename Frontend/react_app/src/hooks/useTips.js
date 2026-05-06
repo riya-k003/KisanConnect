@@ -6,7 +6,7 @@ import { validateTip } from "../utils/validateTip";
 export function useTips() {
     const [tips, setTips] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [Error, setError] = useState("");
+    const [error, setError] = useState("");
     const [comments, setComments] = useState({});
     const [openComment, setopenComment] = useState(null);
     const [commentData, setCommentData] = useState({ content: "" });
@@ -41,22 +41,22 @@ export function useTips() {
     }, []);
 
     const handleLike = async (tip_id) => {
-        setTips((prev) => {
+        setTips((prev) => 
             prev.map((tip) => {
-                (tip.tip_id === tip_id) ? {
+                return (tip.tip_id === tip_id) ? {
                     ...tip,
                     isLiked: !tip.isLiked,
-                    likes_count: tip.isliked ? tip.likes_count - 1 : tip.likes_count + 1,
+                    likes_count: tip.isLiked ? tip.likes_count - 1 : tip.likes_count + 1,
                 }
-                    : tip
+                    : tip;
             })
-        });
-        await tipServices.likeTip(tip_id);
+        );
+        await tipsService.likeTip(tip_id);
     };
 
     const handleDelete = async (tip_id) => {
         try {
-            await tipServices.deleteTip(tip_id);
+            await tipsService.deleteTip(tip_id);
             setTips((prev) =>
                 prev.filter(t => t.tip_id !== tip_id));
         } catch (err) {
@@ -72,18 +72,17 @@ export function useTips() {
         }
 
         try {
-            const data = await tipServices.createTip(tipData);
+            const data = await tipsService.createTip(tipData);
             if (data.tip) {
                 setTips((prev) => [data.tip, ...prev]);
             }
             setError("");
-            setTipsData({ title: "", category: "", content: "" });
         } catch (err) {
-            setError(err.message || "something went wrong while postig the tip");
+            setError(err.message || "something went wrong while posting the tip");
         }
     };
 
-    const handelcommentClick = async (tip_id) => {
+    const handleCommentClick = async (tip_id) => {
         if (openComment === tip_id) {
             setopenComment(null);
             return;
@@ -93,10 +92,10 @@ export function useTips() {
 
         if (!comments[tip_id]) {
             try {
-                const data = await tipService.getComment(tip_id);
+                const data = await tipsService.getComments(tip_id);
                 setComments((prev) => ({
                     ...prev,
-                    [tip_id]: Array.isArray(fetchedComments) ? fetchedComments : [],
+                    [tip_id]: Array.isArray(data) ? data : [],
                 }));
             } catch (err) {
                 setError("Something went wrong while fetching comments");
@@ -106,9 +105,9 @@ export function useTips() {
 
     const handleCommentChange = (e, tip_id) => {
         setError("");
-        const value = e.target.value
+        const value = e.target.value;
         setCommentData({
-            ...CommentData,
+            ...commentData,
             [tip_id]: value
         });
 
@@ -122,11 +121,11 @@ export function useTips() {
             return;
         }
         try {
-            const res = await tipServices.postComment(tip_id, content);
-            const data = await tipServices.getComment();
+            await tipsService.postComments(tip_id, content);
+            const data = await tipsService.getComments(tip_id);
 
-            setComment({
-                ...commentData,
+            setComments({
+                ...comments,
                 [tip_id]: Array.isArray(data) ? data : [],
             });
 
@@ -135,9 +134,9 @@ export function useTips() {
                 [tip_id]: ""
             });
         } catch (error) {
-            setError("Something went wrong wile posting the comment");
+            setError("Something went wrong while posting the comment");
         }
-    }
+    };
 
     return {
         tips,
