@@ -45,3 +45,8 @@
   font-size: 14px;
   font-weight: 500;
 }
+.delete{
+  background-color: grey;
+  height: 3vh;
+  width: 100vh;
+}

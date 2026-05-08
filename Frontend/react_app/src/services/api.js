@@ -17,12 +17,12 @@ export const apiRequest = async (endpoint ,  method = "GET", body = null, signal
     }
 
     const response = await fetch(`${BASE_URL}${endpoint}` , options);
-     if (response.status === 401 || response.status === 403) {
-    localStorage.removeItem("token");
-    window.location.href = "/";
-    return;
-  }
     const data = await response.json();
+
+    if (response.status === 401 || response.status === 403) {
+        localStorage.removeItem("token");
+        throw new Error(data.message || "Unauthorized access");
+    }
 
     if(!response.ok){
         throw new Error(data.message || "Something went wrong");

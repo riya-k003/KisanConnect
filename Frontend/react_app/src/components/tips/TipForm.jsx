@@ -1,4 +1,5 @@
 import {useState} from "react";
+import style from "../../styles/tips.module.css";
 
 function TipForm({onSubmit  , error , setError}){
 
@@ -16,30 +17,7 @@ const [tipData , setTipData] = useState({
   })
 }
   const handlePostTip = async () => {
-      const trimmedTitle = tipData.title.trim();
-  const trimmedCategory = tipData.category.trim();
-  const trimmedContent = tipData.content.trim();
 
-  if (!trimmedTitle || !trimmedCategory || !trimmedContent) {
-    setError("All fields are required");
-    return;
-  }
-
-  if (/^\d+$/.test(trimmedTitle)) {
-    setError("Title cannot contain only numbers");
-    return;
-  }
-
-  if (trimmedTitle.length < 3) {
-    setError("Title must be at least 3 characters");
-    return;
-  }
-
-  if (trimmedContent.length < 10) {
-    setError("Content must be at least 10 characters");
-    return;
-  }
-  
      onSubmit(tipData, () =>
       setTipData({ title: "", category: "", content: "" })
     );
@@ -52,7 +30,7 @@ const [tipData , setTipData] = useState({
     return(
         <>
          <div className="createTip">
-              {error && <p className={style.errorBox}>⚠️{Error}</p>}
+              {error && <p className={style.errorBox}>⚠️{error}</p>}
                 <input
                   name="title"
                   type="text"

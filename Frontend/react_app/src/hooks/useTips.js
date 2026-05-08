@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { tipsService } from "../services/tipsService";
 import { validateTip } from "../utils/validateTip";
 
+
 export function useTips() {
     const [tips, setTips] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -64,7 +65,8 @@ export function useTips() {
         }
     };
 
-    const handlePostTip = async (tipData, content) => {
+    const handlePostTip = async (tipData, resetForm) => {
+        console.log("post button is clicked");
         const validationError = validateTip(tipData);
         if (validationError) {
             setError(validationError);
@@ -77,6 +79,7 @@ export function useTips() {
                 setTips((prev) => [data.tip, ...prev]);
             }
             setError("");
+            resetForm();
         } catch (err) {
             setError(err.message || "something went wrong while posting the tip");
         }
