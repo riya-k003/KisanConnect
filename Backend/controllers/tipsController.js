@@ -183,13 +183,8 @@ exports.togglelike = async (req, res)=>{
 };
 
 exports.deleteTip =  async(req , res)=>{
-    console.log("delete tip called with the params:" , req.params);
-    console.log("Types of param", typeof req.params.tip_id);
     const tip_id = parseInt(req.params.tip_id, 10);
     const farmer_id = req.user.id;
-
-    console.log("Delete tip called with farmer_id and tip_id:" , farmer_id , tip_id);
-    console.log("Types - farmer_id:", typeof farmer_id, "tip_id:", typeof tip_id);
 
     const sql = "DELETE FROM tips WHERE farmer_id = ? AND tip_id =?;"
     const queryPromise = db.query(sql , [farmer_id , tip_id]);
@@ -199,7 +194,6 @@ exports.deleteTip =  async(req , res)=>{
 
     try{
         const [result] = await Promise.race([queryPromise , timeoutPromise]);
-        console.log("Delete result:", result);
             if(result.affectedRows === 0){
                 return res.status(404).json({
                     message: "Tip not found or you don't have permission to delete this tip"
