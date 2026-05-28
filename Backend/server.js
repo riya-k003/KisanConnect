@@ -6,6 +6,7 @@ require("dotenv").config();
 const userRoutes = require("./routes/userRoutes");
 const tipsRoutes = require("./routes/tipsRoutes");
 const commentsRoutes = require("./routes/commentsRoutes");
+const kisanAiRoutes = require("./routes/kisanAI.route");
 console.log("tipsRoutes imported");
 
 
@@ -20,7 +21,7 @@ app.use(express.json());
 app.use("/api/users" , userRoutes);
 app.use("/tips" , tipsRoutes);
 app.use('/tips', commentsRoutes);
-
+app.use("/api/kisanai" , kisanAiRoutes);
 
 app.listen(3000 , ()=>{
     console.log("Server is runing on http://localhost:3000");
