@@ -2,6 +2,7 @@ import { BrowserRouter, Routes , Route} from "react-router-dom";
 import TipsPage from "./pages/TipsPage.jsx";
 import Authpage from "./pages/Authpage.jsx";
 import ProtectedRoute from "./components/common/ProtectedRoute";
+import AiPage from "./pages/AiPage.jsx";
 
 
 function App() {
@@ -20,7 +21,16 @@ function App() {
         </ProtectedRoute>
       }
       />
+      <Route 
+      path="/ai-assistant"
+      element={
+        <ProtectedRoute>
+          <AiPage/>
+          </ProtectedRoute>
+      }
+      />
           </Routes>
+
         </div>
     </BrowserRouter>
   );
