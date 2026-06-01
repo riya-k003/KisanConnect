@@ -182,46 +182,52 @@ npm run dev
 
 ## 📁 Project Structure
 
+```text
 KisanConnect/
 ├── Backend/
 │   ├── controllers/
 │   │   ├── userController.js
 │   │   ├── tipsController.js
 │   │   ├── commentsController.js
-│   │   └── kisanAI.controller.js   ← AI Assistant
+│   │   └── kisanAI.controller.js      # AI Assistant Controller
+│   │
 │   ├── routes/
 │   │   ├── userRoutes.js
 │   │   ├── tipsRoutes.js
 │   │   ├── commentsRoutes.js
-│   │   └── kisanAI.route.js        ← AI Assistant
+│   │   └── kisanAI.route.js           # AI Assistant Routes
+│   │
 │   ├── middleware/
 │   ├── config/
 │   ├── .env
 │   └── server.js
 │
 └── Frontend/
-└── react_app/
-└── src/
-├── services/
-│   ├── api.js
-│   ├── authService.js
-│   ├── tipsService.js
-│   └── kisanAI.js      ← AI Assistant
-├── pages/
-│   ├── AuthPage.jsx
-│   ├── TipsPage.jsx
-│   └── AiPage.jsx      ← AI Assistant
-├── components/
-│   ├── auth/
-│   ├── tips/
-│   ├── common/
-│   └── KisanChat.jsx   ← AI Chatbot UI
-├── hooks/
-├── utils/
-├── styles/
-├── App.jsx
-└── main.jsx
-
+    └── react_app/
+        └── src/
+            ├── services/
+            │   ├── api.js
+            │   ├── authService.js
+            │   ├── tipsService.js
+            │   └── kisanAI.js         # AI Assistant API Service
+            │
+            ├── pages/
+            │   ├── AuthPage.jsx
+            │   ├── TipsPage.jsx
+            │   └── AiPage.jsx         # AI Assistant Page
+            │
+            ├── components/
+            │   ├── auth/
+            │   ├── tips/
+            │   ├── common/
+            │   └── KisanChat.jsx      # Chatbot UI Component
+            │
+            ├── hooks/
+            ├── utils/
+            ├── styles/
+            ├── App.jsx
+            └── main.jsx
+```
 ---
 
 ## 🚀 Planned Features
