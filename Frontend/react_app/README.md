@@ -111,3 +111,13 @@ npm start
 | Database | MySQL |
 | Auth | JWT |
 | Styling | CSS Modules |
+| AI Assistant | Groq API (Llama 3.3 70B) |
+
+## AI Assistant
+
+KissanConnect has a built-in AI farming assistant powered by **Groq (Llama 3.3 70B)**.
+
+- Accessible at `/ai-assistant` (protected route)
+- Supports **Hindi and English**
+- Covers crop diseases, pest control, sowing, harvesting, fertilizers, irrigation, and government schemes
+- Quick question chips for common farmer queries

@@ -643,3 +643,157 @@ Input → State → API → Middleware → Controller → DB → Response → UI
 ```
 
 ---
+
+---
+
+# 🤖 AI Assistant Feature (KissanConnect)
+
+---
+
+## 🎯 Goal
+
+Farmers can ask farming questions and get AI-powered answers in Hindi or English.
+
+---
+
+## 🧠 Core Idea
+
+Frontend → Backend → Groq API → Response → Frontend
+
+We never call Groq directly from frontend.
+**Why?** API key would be exposed in browser.
+
+---
+
+## 🔄 API Design
+### Request Body:
+```json
+{
+  "message": "gehun mein kide lag gaye hain",
+  "language": "hi"
+}
+```
+
+### Response:
+```json
+{
+  "reply": "गेहूं में कीड़े लगने पर..."
+}
+```
+
+---
+
+## 📁 Files Created
+
+| File | Purpose |
+|---|---|
+| `controllers/kisanAI.controller.js` | Groq API call logic |
+| `routes/kisanAI.route.js` | Route definition |
+
+---
+
+## ⚙️ Controller Flow
+
+1. Get `message` and `language` from `req.body`
+2. Validate — if no message → return 400 error
+3. Call Groq API with system prompt
+4. Return `reply` to frontend
+
+---
+
+## 🧠 System Prompt Concept
+
+System prompt defines AI behavior:
+
+```js
+`You are KissanConnect's AI assistant for Indian farmers.
+- Reply in Hindi or English based on language
+- Topics: crop diseases, pests, fertilizers, irrigation, government schemes
+- Keep answers under 150 words`
+```
+
+👉 Same AI, different behavior based on prompt.
+
+---
+
+## 🔑 Environment Variable
+
+GROQ_API_KEY=your_key_here
+
+👉 Never hardcode API keys in code
+👉 Always use `process.env.GROQ_API_KEY`
+
+---
+
+## 💻 Controller Logic (Pseudo Code)
+
+```js
+IF (no message)
+    return 400 error
+
+CALL Groq API with message + system prompt
+
+IF (success)
+    return { reply }
+ELSE
+    return 500 error
+```
+
+---
+
+## ⚠️ Edge Cases
+
+* Empty message → validate and return error
+* Groq API down → catch error, return 500
+* Wrong API key → 401 from Groq
+
+---
+
+## ❌ Common Mistakes
+
+* Calling AI API directly from frontend (exposes key)
+* Not validating empty message
+* Hardcoding API key in controller
+* Forgetting to register route in server.js
+
+---
+
+## 🧠 Key Learnings
+
+* External API integration flow
+* Keeping API keys secure in `.env`
+* System prompts control AI behavior
+* Always validate input before calling external APIs
+
+---
+
+## 🚀 Flow Summary
+
+Frontend Input
+↓
+POST /api/kisanai/ask
+↓
+Validate message
+↓
+Call Groq API
+↓
+Get reply
+↓
+Send to Frontend
+
+---
+
+## 🧠 Daily Revision Questions
+
+1. Why do we call Groq from backend, not frontend?
+2. What is a system prompt?
+3. What happens if message is empty?
+4. Where is the API key stored?
+5. Which model does KissanConnect use?
+
+**Answers:**
+1. API key security
+2. Instructions that define AI behavior
+3. Return 400 validation error
+4. Backend `.env` file
+5. `llama-3.3-70b-versatile` via Groq
