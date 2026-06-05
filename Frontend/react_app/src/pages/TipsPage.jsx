@@ -2,6 +2,7 @@ import { useTips } from "../hooks/useTips";
 import TipCard from "../components/tips/TipCard.jsx";
 import TipForm from "../components/tips/TipForm.jsx";
 import   SidebarButton   from "../components/Layout/SidebarButton.jsx";
+import motivationBg from "../assets/motivation-bg.png"
 import {
   Home,
   Flame,
@@ -48,23 +49,23 @@ function TipsPage() {
 
 
     {/* Main Layout*/}
-<div className="max-w-screen-xl mx-auto flex gap-6 p-4 lg:p-6 items-start">
+<div className="max-w-screen-xl mx-auto flex gap-6 p-0  items-start">
 
         {/* Left sidebar */}
-        <aside className="hidden lg:flex flex-col w-56 ml-4 shrink-0 h-screen sticky top-0 bg-[#F7F8F3] border border-[#E8EDE0] rounded-3xl p-6 shadow-sm gap-4 overflow-y-auto">
-            <h2 className="flex itmes-center gap-2 text-xl font-bold text-[#2F6B3F]">
-              <sprout size={22}/>
+        <aside style={{margin: '20px'}} className="hidden lg:flex flex-col w-56 mx-4 my-4 top-4 shrink-0  sticky top-0 bg-[#F7F8F3] border border-[#E8EDE0] rounded-3xl px-4 py-6 shadow-sm gap-5">
+            <h2 className="flex itmes-center gap-2 text-xl font-bold text-[#2F6B3F] px-2">
+              <Sprout size={22}/>
              KisanConnect
               </h2>
 
-              <p className="text-[#555E55] text-sm leading-snug">
+              <p className="text-[#555E55] text-sm leading-snug px-2">
                 Grow together, share knowledge, prosper together.
               </p>
-              <button className="flex items-center justify-center gap-2 min-h-9 m- 4 bg-[#4CAF50] hover:bg-[#3A8A3A] text-white text-sm font-medium rounded-xl py-2.5 px-4 transition-colors">
+              <button className="flex items-center justify-center gap-2  bg-[#4CAF50] hover:bg-[#3A8A3A] text-white text-sm font-medium rounded-xl py-2.5 px-4 transition-colors mx-2">
                 + Create Tip
               </button>
 
-              <nav className="flex flex-col gap-3 mt-4">
+              <nav className="flex flex-col gap-1 px-2">
                 <SidebarButton icon={Home} active>
                   Home
                   </SidebarButton>
@@ -84,14 +85,14 @@ function TipsPage() {
                   Profile
                 </SidebarButton>
               </nav>
-               <div className="mt-auto mx-2 mb-2">
-              <div className="flex flex-col h-full bg-white border border-[#E8EDE0] rounded-2xl p-4 m-3 mt-auto gap-2 shadow-sm ">
-                <h3 className="text-sm font-semibold text-[#2F6B3F] flex items-center gap-1">🌱Daily Motivation</h3>
+               <div className="mt-auto mx-2">
+              <div className="flex flex-col  bg-white border border-[#E8EDE0] rounded-2xl p-4  gap-2 shadow-sm ">
+                <h3 className="text-sm font-semibold text-[#2F6B3F]">🌱Daily Motivation</h3>
                 <p className="text-xs text-[#555E55] leading-relaxed ">
                   Small steps today,
                   bigger harvest tomorrow.
                 </p>
-                <img className="rounded-xl w-full object-cover mt-1" src="/assets/motivation-bg.png" alt="Daily Motivation" />
+                <img className="rounded-xl w-full object-cover mt-1" src={motivationBg} alt="Daily Motivation" />
 
               </div>
               </div>
