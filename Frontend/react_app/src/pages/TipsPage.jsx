@@ -33,9 +33,9 @@ function TipsPage() {
   return (
   <div className="min-h-screen bg-[#F4F6F0]">
     {/* Top header (mobile only) */}
-    <header className="lg:hidden sticky top-0 z-bg-[#F7F8F3] border-b border-[#E8EDE0] px-4 py-2 flex itmes-center justify-between shadow-sm">
+    <header className="lg:hidden sticky top-0 z-50 bg-[#F7F8F3] border-b border-[#E8EDE0] px-4 py-2 flex items-center justify-between shadow-sm">
       <h2 className="text-lg font-bold text-[#2F6B3F] flex items-center gap-1">
-        <Sprout size={20} /> KisanConnect
+        <Sprout size={30} /> KisanConnect
       </h2>
       <nav className="flex items-center gap-1">
          <SidebarButton icon={Home} active />
@@ -49,23 +49,29 @@ function TipsPage() {
 
 
     {/* Main Layout*/}
-<div className="max-w-screen-xl mx-auto flex gap-6 p-0  items-start">
+<div className="max-w-[1400px] mx-auto px-6 py-6 flex gap-8 items-start">
 
         {/* Left sidebar */}
-        <aside style={{margin: '20px'}} className="hidden lg:flex flex-col w-56 mx-4 my-4 top-4 shrink-0  sticky top-0 bg-[#F7F8F3] border border-[#E8EDE0] rounded-3xl px-4 py-6 shadow-sm gap-5">
-            <h2 className="flex itmes-center gap-2 text-xl font-bold text-[#2F6B3F] px-2">
-              <Sprout size={22}/>
+        <aside className="hidden lg:flex flex-col w-[250px] min-h-[calc(100vh-48px)] sticky top-4 bg-white border border-[#E8EDE0] rounded-[32px] px-7 py-8 shadow-sm
+">
+  <div className="mb-8 px-2">
+            <h2 className="flex items-center gap-3 m text-2xl font-bold text-[#2F6B3F]">
+              <Sprout size={34}/>
              KisanConnect
               </h2>
 
-              <p className="text-[#555E55] text-sm leading-snug px-2">
+             <p className="mt-5 text-[#666] text-[18px] leading-9">
                 Grow together, share knowledge, prosper together.
               </p>
-              <button className="flex items-center justify-center gap-2  bg-[#4CAF50] hover:bg-[#3A8A3A] text-white text-sm font-medium rounded-xl py-2.5 px-4 transition-colors mx-2">
-                + Create Tip
-              </button>
-
-              <nav className="flex flex-col gap-1 px-2">
+              </div>
+              <button
+  className=" h-14 w-full bg-[#57B847] hover:bg-[#4EA73F] text-white font-semibold text-lg rounded-2xl shadow-sm transition-all duration-20 mb-8
+"
+>
+  + Create Tip
+</button>
+          <div className="h-px bg-[#E8EDE0] my-3" />
+            <nav className="flex flex-col gap-1 px-1">
                 <SidebarButton icon={Home} active>
                   Home
                   </SidebarButton>
@@ -85,15 +91,30 @@ function TipsPage() {
                   Profile
                 </SidebarButton>
               </nav>
-               <div className="mt-auto mx-2">
-              <div className="flex flex-col  bg-white border border-[#E8EDE0] rounded-2xl p-4  gap-2 shadow-sm ">
-                <h3 className="text-sm font-semibold text-[#2F6B3F]">🌱Daily Motivation</h3>
-                <p className="text-xs text-[#555E55] leading-relaxed ">
+               <div className="mt-auto pt-8">
+  <div
+    className="
+    overflow-hidden
+    rounded-3xl
+    border border-[#E8EDE0]
+    bg-gradient-to-b from-[#FAFBF8] to-[#F1F6EC]
+    shadow-sm
+    "
+  >
+    <div className="p-5">
+                <h3 className="font-semibold text-[#2F6B3F]">🌱Daily Motivation</h3>
+                <p className="text-sm text-[#666] mt-2 leading-relaxed">
                   Small steps today,
                   bigger harvest tomorrow.
                 </p>
-                <img className="rounded-xl w-full object-cover mt-1" src={motivationBg} alt="Daily Motivation" />
-
+                </div>
+                <div className="px-4 pb-4">
+  <img
+    src={motivationBg}
+    alt="Daily Motivation"
+    className="w-full h-44 object-cover rounded-2xl"
+  />
+</div>
               </div>
               </div>
         </aside>
@@ -102,18 +123,18 @@ function TipsPage() {
         <main className="flex-1 min-w-0 flex flex-col gap-6">
           {/* header */}
           <div>
-            <h1 className="text-3xl font-bold text-[#1A2E1A]">
-              Farmer Tips 🌿
+            <h1 className="text-[32px] font-bold text-[#112214] tracking-tight flex items-center gap-2">
+              Farmer Tips <span className="text-2xl">🌿</span>
               </h1>
 
-              <p className="text-[#555E55] text-sm mt-1">
+              <p className="text-[#667366] text-[15px] mt-1">
                 Share knowledge. Help farmers grow.
               </p>
           </div>
-
-         
+        <div className="flex gap-8 items-start w-full">
+        <div className="flex-1 min-w-0 flex flex-col">
             {/* Create tips */}
-            <div className="bg-white border border-[#E8EDE0] rounded-3xl p-6 shadow-sm">
+            <div className="bg-white border border-[#E8EDE0] rounded-3xl p-6 shadow-sm mb-8">
               <TipForm 
               onSubmit={handlePostTip} 
               error={error} 
@@ -121,12 +142,14 @@ function TipsPage() {
               />
             </div>
 
+           
+
             {/* Tips Cards */}
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-5 mt-2">
                 {loading ? (
-            <p className="text-[#5555E55]">Loading...</p>
+            <p className="text-[#5555E55] text-center py-8">Loading...</p>
           ) : tips.length === 0 ? (
-            <p className="text-[#5555E55]">No tips available</p>
+            <p className="text-[#5555E55] text-center py-8">No tips available</p>
           ) : (
             tips.map((tip) => (
               <TipCard
@@ -145,15 +168,14 @@ function TipsPage() {
             ))
           )}
             </div>
-        </main>
-
-          {/* right sidebar */}
-          <aside className="hidden lg:flex flex-col w-56 shrink-0 sticky top-6 self-start bg-[#F7F8F3] border border-[#E8EDE0] rounded-3xl p-6 shadow-sm gap-5">
-            <h2 className="text-lgfont-bold text-[#1A2E1A]">
+            </div>
+            {/* right sidebar */}
+          <aside className="hidden xl:flex flex-col w-56 shrink-0 sticky top-6 self-start bg-[#F7F8F3] border border-[#E8EDE0] rounded-3xl p-6 shadow-sm gap-4">
+            <h2 className="text-[17px] font-bold text-[#112214] flex items-center gap-2 px-1">
               🔥Trending topics
             </h2>
 
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1.5">
               {[
                 {icon: "🌾" , label: "Wheat Farming" , count: "1.2k posts"},
                 {icon: "💧" , label: "Irrigation" , count: "980 posts"},
@@ -177,6 +199,10 @@ function TipsPage() {
               View all topics 
             </button>
           </aside>
+          </div>
+        </main>
+
+          
       </div>
       </div>
   );

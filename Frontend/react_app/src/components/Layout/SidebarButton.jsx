@@ -1,17 +1,25 @@
-function SidebarButton({icon:Icon, children, active}){
-    return(
-        <button 
-        className={`flex items-center gap-3 px-3 py-2 min-h-9 rounded-xl text-sm font-medium transition-colors
-            ${children ? "w-full" : ""}
-            ${active 
-                ? "bg-[#EEF2E6] text-[#2A6B2A] hover:border-[#2A6B2A]"
-                : "text-[#555E55] hover:bg-[#EEF2E6] hover:text-[#2A6B2A]"
-            }`}
-            >
-                <Icon size={18}/>
-                {children && <span>{children}</span>}
-            </button>
-    );
+function SidebarButton({ icon: Icon, children, active }) {
+  return (
+    <button
+      className={`
+        flex items-center gap-4
+        w-full
+        px-5 py-4  // Increased horizontal and vertical padding
+        rounded-2xl
+        font-semibold
+        text-[15px]
+        transition-all duration-200
+        ${
+          active
+            ? "bg-[#EEF7EA] text-[#2F6B3F]"
+            : "text-[#445244] hover:bg-[#F5F7F2]"
+        }
+      `}
+    >
+      <Icon className={`w-[22px] h-[22px] shrink-0 ${active ? "text-[#4EA73F]" : "text-[#667866]"}`} />
+      {children && <span>{children}</span>}
+    </button>
+  );
 }
 
 export default SidebarButton;
