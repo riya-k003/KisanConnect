@@ -2,8 +2,8 @@ function SidebarButton({ icon: Icon, children, active }) {
   return (
     <button
       className={`
-        flex items-center gap-4
-        w-full
+        flex items-center gap-3
+        h-[4.5vh]
         px-5 py-4  // Increased horizontal and vertical padding
         rounded-2xl
         font-semibold

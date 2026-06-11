@@ -49,29 +49,31 @@ function TipsPage() {
 
 
     {/* Main Layout*/}
-<div className="max-w-[1400px] mx-auto px-6 py-6 flex gap-8 items-start">
+<div className="max-w-[1400px] mx-auto px-6 py-6 flex gap-10 items-start">
 
         {/* Left sidebar */}
-        <aside className="hidden lg:flex flex-col w-[250px] min-h-[calc(100vh-48px)] sticky top-4 bg-white border border-[#E8EDE0] rounded-[32px] px-7 py-8 shadow-sm
+        <aside className="hidden lg:flex flex-col w-[280px] min-h-[calc(100vh-40px)] sticky top-4 bg-white border border-[#E8EDE0] rounded-[32px] px-7 py-8 shadow-sm
 ">
-  <div className="mb-8 px-2">
-            <h2 className="flex items-center gap-3 m text-2xl font-bold text-[#2F6B3F]">
+  <div className=" h-[15vh] rounded-3xl content-center">
+            <h2 className="flex items-center gap-4 m text-2xl font-bold text-[#2F6B3F]">
               <Sprout size={34}/>
              KisanConnect
               </h2>
-
-             <p className="mt-5 text-[#666] text-[18px] leading-9">
+            
+             <p className=" text-[#666] text-[15px] leading-8">
                 Grow together, share knowledge, prosper together.
               </p>
               </div>
+              <div className="flex  h-[50px] justify-center itmes-center ">
               <button
-  className=" h-14 w-full bg-[#57B847] hover:bg-[#4EA73F] text-white font-semibold text-lg rounded-2xl shadow-sm transition-all duration-20 mb-8
+  className="h-10 w-[200px] bg-[#57B847] hover:bg-[#4EA73F] text-white font-semibold text-lg rounded-2xl shadow-sm transition-all duration-20 mx-10 my-10
 "
 >
   + Create Tip
 </button>
-          <div className="h-px bg-[#E8EDE0] my-3" />
-            <nav className="flex flex-col gap-1 px-1">
+</div>
+          <div className="h-[35vh]" >
+            <nav className="flex flex-col gap-2 px-1">
                 <SidebarButton icon={Home} active>
                   Home
                   </SidebarButton>
@@ -91,9 +93,12 @@ function TipsPage() {
                   Profile
                 </SidebarButton>
               </nav>
-               <div className="mt-auto pt-8">
+              </div>
+               <div className="flex justify-center mt-auto pt-8">
   <div
     className="
+    h-[33vh]
+    w-[16vw]
     overflow-hidden
     rounded-3xl
     border border-[#E8EDE0]
@@ -101,7 +106,7 @@ function TipsPage() {
     shadow-sm
     "
   >
-    <div className="p-5">
+    <div className=" h-[10vh] pb-1">
                 <h3 className="font-semibold text-[#2F6B3F]">🌱Daily Motivation</h3>
                 <p className="text-sm text-[#666] mt-2 leading-relaxed">
                   Small steps today,
@@ -112,7 +117,7 @@ function TipsPage() {
   <img
     src={motivationBg}
     alt="Daily Motivation"
-    className="w-full h-44 object-cover rounded-2xl"
+    className="w-[16vw] h-[30vh] object-cover rounded-2xl"
   />
 </div>
               </div>
