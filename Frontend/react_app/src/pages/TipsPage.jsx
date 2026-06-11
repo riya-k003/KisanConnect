@@ -94,7 +94,7 @@ function TipsPage() {
                 </SidebarButton>
               </nav>
               </div>
-               <div className="flex justify-center mt-auto pt-8">
+               <div className="flex justify-center mt-auto pt-8 ">
   <div
     className="
     h-[33vh]
@@ -104,22 +104,28 @@ function TipsPage() {
     border border-[#E8EDE0]
     bg-gradient-to-b from-[#FAFBF8] to-[#F1F6EC]
     shadow-sm
+    flex flex-col justify-top
+    p-5
+    relative
+    bg-cover
+    bg-center
     "
+    style={{
+      backgroundImage:`url(${motivationBg})`
+    }}
   >
-    <div className=" h-[10vh] pb-1">
+    <div className="absolute insert-0 bg-black/20"></div>
+
+    <div className="relative z-10">
+    
                 <h3 className="font-semibold text-[#2F6B3F]">🌱Daily Motivation</h3>
-                <p className="text-sm text-[#666] mt-2 leading-relaxed">
+                <p className="text-lg font-semibold text-[#666] mt-2 leading-relaxed">
                   Small steps today,
                   bigger harvest tomorrow.
                 </p>
-                </div>
-                <div className="px-4 pb-4">
-  <img
-    src={motivationBg}
-    alt="Daily Motivation"
-    className="w-[16vw] h-[30vh] object-cover rounded-2xl"
-  />
-</div>
+                
+
+              </div>
               </div>
               </div>
         </aside>
