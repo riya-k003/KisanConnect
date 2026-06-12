@@ -8,6 +8,26 @@ const [commentData, setCommentData] = useState({
     content: "",
   });
 
+  //fetch the comments automatically when the components mount
+  useEffect(()=>{
+    const fetchInitialComments = async ()=>{
+      try{
+        const res = await fetch(`${import.mets.env.VITE_API_URL}/tips/${tip_id}/comments`);
+        const fetchedComments = await res.json();
+
+        setComments((prev)=>({
+          ...prev,
+          [tip_id]:Array.isArray(fetchedComments)?fetchedComments : [],
+        }));
+      }catch(err){
+        console.error("Error loading initial comments:" , err);
+      }
+    };
+    if(tip_id){
+      fetchInitialComments();
+    }
+  },{tip_id});
+
     const handleChange = (e , tip_id) => {
     console.log("handlChange is hit with event name:" , e.target.name , "and value:" , e.target.value);
     setError("");
@@ -71,7 +91,7 @@ const [commentData, setCommentData] = useState({
   return(
     <>
      <button onClick={() => handlecommentClick(tip.tip_id)}>
-                    Comments
+                   {comments[tip.tip_id]?.length}
                   </button>
                   <input
                     type="text"
