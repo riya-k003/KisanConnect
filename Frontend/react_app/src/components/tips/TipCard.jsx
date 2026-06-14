@@ -1,5 +1,6 @@
 import { timeAgo } from "../../utils/timeAgo";
-import {Earth , Trash2 , Heart , MessageCircle , Bookmark , Share} from "lucide-react"
+import CommentSection from "./CommentSection";
+import {Earth , Trash2 , Heart , MessageCircle , Bookmark , Share , SendHorizontal , Smile} from "lucide-react"
 
 
 function TipCard({
@@ -147,10 +148,11 @@ function TipCard({
         mt-8
         pt-6
         border-t border-[#E8EDE0]
+        rounded-3xl
         flex items-center justify-between
       "
       >
-        <div className="flex items-center gap-8">
+        <div className="flex items-center h-[5vh] w-[30%] justify-center gap-8">
           <button
             onClick={() => onLike(tip.tip_id)}
             className="
@@ -182,75 +184,22 @@ function TipCard({
           </button>
         </div>
 
-        <button className="text-[#666]">
+            <div className="h-[5vh] w-[10%] flex justify-center rounded-3xl">
+        <button className="text-[#666] ">
           < Share size={20}/>
         </button>
-      </div>
-
-      {/* Comment Input */}
-      <div className={`mt-6 flex gap-3 ${openComment === tip.tip_id ? "block" : "hidden"}`}>
-        <input
-          type="text"
-          name="content"
-          placeholder="Write a comment..."
-          value={commentData[tip.tip_id] || ""}
-          onChange={(e) => onCommentChange(e, tip.tip_id)}
-          className="
-          flex-1
-          h-12
-          rounded-2xl
-          border border-[#E8EDE0]
-          px-4
-        "
-        />
-
-        <button
-          onClick={() => onCommentPost(tip.tip_id)}
-          className="
-          px-6
-          h-12
-          rounded-2xl
-          bg-[#58B947]
-          text-white
-          font-medium
-          hover:bg-[#4BA43D]
-        "
-        >
-          Post
-        </button>
-      </div>
-
-      {/* Comments */}
-      {openComment === tip.tip_id && (
-        <div className="mt-6 space-y-4">
-          {comments[tip.tip_id] ? (
-            comments[tip.tip_id].length > 0 ? (
-              comments[tip.tip_id].map((c, i) => (
-                <div
-                  key={i}
-                  className="
-                  bg-[#F7F8F3]
-                  border border-[#E8EDE0]
-                  rounded-2xl
-                  p-5
-                  text-[#555E55]
-                "
-                >
-                  {c.content}
-                </div>
-              ))
-            ) : (
-              <p className="text-[#777]">
-                No comments yet
-              </p>
-            )
-          ) : (
-            <p className="text-[#777]">
-              Loading comments...
-            </p>
-          )}
         </div>
-      )}
+      </div>
+
+      <CommentSection
+  tipId={tip.tip_id}
+  comments={comments}
+  openComment={openComment}
+  commentData={commentData}
+  onCommentClick={onCommentClick}
+  onCommentChange={onCommentChange}
+  onCommentPost={onCommentPost}
+/>
     </div>
   );
 }
