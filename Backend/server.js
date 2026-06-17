@@ -27,4 +27,4 @@ app.use("/api/kisanai" , kisanAiRoutes);
 
 app.listen(3000 , ()=>{
     console.log("Server is runing on http://localhost:3000");
-});
+}); 
