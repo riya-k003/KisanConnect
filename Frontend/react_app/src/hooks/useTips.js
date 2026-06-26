@@ -52,7 +52,22 @@ export function useTips() {
                     : tip;
             })
         );
+        try{
         await tipsService.likeTip(tip_id);
+        }catch(err){
+            console.log("Like failed, reverting:" , err);
+            // agar fail hojaye wapas prani state par le aao
+            setTips((prev)=>
+            prev.map((tip)=>
+            tip.tip_id === tip_id?{
+                ...tip,
+                isLiked: !tip.isLiked,
+                likes_count: tip.isLiked ? tip.likes_count -1 : tip.likes_count + 1,
+            }
+            : tip
+        )
+    );
+        }
     };
 
     const handleDelete = async (tip_id) => {

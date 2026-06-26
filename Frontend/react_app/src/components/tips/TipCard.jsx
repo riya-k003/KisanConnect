@@ -162,7 +162,10 @@ function TipCard({
             transition
           "
           >
-            <Heart size={20}/>
+            <Heart size={20}
+            className={tip.isLiked ? "text-red-500" : "text-[#666]"}
+            fill={tip.isLiked ? "currentColor" : "none"}
+            />
             <span>{tip.likes_count}</span>
           </button>
 
