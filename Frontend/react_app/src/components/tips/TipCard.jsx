@@ -158,7 +158,6 @@ function TipCard({
             className="
             flex items-center gap-2
             text-[#666]
-            hover:text-red-500
             transition
           "
           >
@@ -177,9 +176,9 @@ function TipCard({
           "
           >
             <MessageCircle size={20}/>
-            <span>
-              {comments[tip.tip_id]?.length || 0}
-            </span>
+           <span>
+  {comments[tip.tip_id] ? comments[tip.tip_id].length : tip.comments_count ?? 0}
+</span>
           </button>
 
           <button className="text-[#666]">

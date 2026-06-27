@@ -97,23 +97,13 @@ exports.viewTips = async (req, res)=>{
         t.category,
         t.created_at,
         u.name AS farmer_name,
-        COUNT(DISTINCT al.user_id) AS likes_count,
-        CASE
-            WHEN ul.user_id IS NOT NULL THEN true
-            Else false
-        END AS isLiked
+       (SELECT COUNT(*) FROM likes l WHERE l.tip_id = t.tip_id) AS likes_count,
+       (SELECT COUNT(*) FROM comments cm WHERE cm.tip_id = t.tip_id) AS comments_count,
+        EXISTS (
+        SELECT 1 FROM likes ul WHERE ul.tip_id = t.tip_id AND ul.user_id = ?
+        ) AS isliked
     FROM tips t
     JOIN users u ON t.farmer_id = u.id
-    LEFT JOIN likes al ON t.tip_id = al.tip_id 
-    LEFT JOIN likes ul ON t.tip_id = ul.tip_id AND ul.user_id = ?
-    GROUP BY 
-        t.tip_id,
-        t.title,
-        t.content,
-        t.category,
-        t.created_at,
-        u.name,
-        ul.user_id
     ORDER BY t.tip_id DESC
     LIMIT ? OFFSET ?
         `;
@@ -129,7 +119,6 @@ exports.viewTips = async (req, res)=>{
             });
         }catch(err){
             console.log("DB ERROR:" , err);
-            console.log(res);
             res.status(401).json({
                 message: "server error"
             });
