@@ -3,6 +3,7 @@ const db = require("../config/db")
 exports.createTip = (req , res) =>{
 
     console.log("createTip called with body:", req.body);
+     console.log("req.file:", req.file);  
     console.log("User from token:", req.user);
 
     const {title , content , category} = req.body;
@@ -47,10 +48,11 @@ if (trimmedContent.length < 10) {
 }
 
     const farmer_id = req.user.id;
+    const image_url = req.file ? req.file.path : null;
 
-    const sql = "INSERT INTO tips (title , content , category , farmer_id) VALUES (? , ? , ? , ?)";
+    const sql = "INSERT INTO tips (title , content , category , farmer_id , image_url) VALUES (? , ? , ? , ? , ?)";
     
-    const queryPromise = db.query(sql , [trimmedTitle , trimmedContent , trimmedCategory , farmer_id]);
+    const queryPromise = db.query(sql , [trimmedTitle , trimmedContent , trimmedCategory , farmer_id , image_url]);
     const timeoutPromise = new Promise((_, reject) => 
         setTimeout(() => reject(new Error('Database query timeout')), 5000)
     );
@@ -66,6 +68,7 @@ if (trimmedContent.length < 10) {
                     content : trimmedContent,
                     category : trimmedCategory,
                     farmer_id,
+                    image_url,
                     likes_count:0,
                     isLiked:false
                 }
