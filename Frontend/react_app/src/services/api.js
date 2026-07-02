@@ -2,10 +2,15 @@ const BASE_URL = import.meta.env.VITE_API_URL;
 
 export const apiRequest = async (endpoint ,  method = "GET", body = null, signal = null) =>{
     const token = localStorage.getItem("token");
+    const isFormData = body instanceof FormData; //detect the form data
+
+    console.log("isFormData:", isFormData);  // <-- ADD KARO
+    console.log("body:", body);    
+    
     const options ={
         method: method,
         headers:{ 
-            "Content-Type" : "application/json",
+        ...(!isFormData && {"Content-Type" : "application/json"}),
         ...(token && {Authorization: `Bearer ${token}`})
     },
     ...(signal && {signal}),
@@ -13,7 +18,7 @@ export const apiRequest = async (endpoint ,  method = "GET", body = null, signal
     };
 
     if(body){
-        options.body = JSON.stringify(body);
+        options.body =  isFormData ? body : JSON.stringify(body);
     }
 
     const response = await fetch(`${BASE_URL}${endpoint}` , options);

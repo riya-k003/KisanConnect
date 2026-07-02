@@ -68,9 +68,12 @@ if (trimmedContent.length < 10) {
                     content : trimmedContent,
                     category : trimmedCategory,
                     farmer_id,
+                    farmer_name: req.user.name,
                     image_url,
                     likes_count:0,
-                    isLiked:false
+                    isLiked:false,
+                    comments_count: 0,
+                    created_at: new Date(),
                 }
             });
         })
@@ -99,6 +102,7 @@ exports.viewTips = async (req, res)=>{
         t.content,
         t.category,
         t.created_at,
+        t.image_url,
         u.name AS farmer_name,
        (SELECT COUNT(*) FROM likes l WHERE l.tip_id = t.tip_id) AS likes_count,
        (SELECT COUNT(*) FROM comments cm WHERE cm.tip_id = t.tip_id) AS comments_count,

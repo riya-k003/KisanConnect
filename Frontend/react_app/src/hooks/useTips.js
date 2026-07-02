@@ -80,16 +80,12 @@ export function useTips() {
         }
     };
 
-    const handlePostTip = async (tipData, resetForm) => {
+    const handlePostTip = async (formData, resetForm) => {
         console.log("post button is clicked");
-        const validationError = validateTip(tipData);
-        if (validationError) {
-            setError(validationError);
-            return;
-        }
+        
 
         try {
-            const data = await tipsService.createTip(tipData);
+            const data = await tipsService.createTip(formData);
             if (data.tip) {
                 setTips((prev) => [data.tip, ...prev]);
             }
