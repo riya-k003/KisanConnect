@@ -33,9 +33,7 @@ function KisanChat() {
   }, [messages]);
 
   const sendMessage = async (text) => {
-    console.log("sendMessage called with:" , text);
     const userMsg = text || input.trim();
-     console.log("userMsg:", userMsg);
     if (!userMsg || loading) return;
 
     setInput("");
@@ -44,10 +42,8 @@ function KisanChat() {
 
     try {
       const reply = await askKisanAI(userMsg, language);
-      console.log("Reply received in KisanChat:" , reply);
       setMessages((prev) => [...prev, { role: "bot", text: reply }]);
-    } catch (error) {
-      console.error("Error in KisanChat:" , error);
+    } catch (err) {
       setMessages((prev) => [
         ...prev,
         {

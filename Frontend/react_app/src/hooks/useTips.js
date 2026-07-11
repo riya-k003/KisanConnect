@@ -1,26 +1,37 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState , useCallback} from "react";
 import { useNavigate } from "react-router-dom";
 import { tipsService } from "../services/tipsService";
 import { validateTip } from "../utils/validateTip";
 
 
+const LIMIT = 10;
+
 export function useTips() {
     const [tips, setTips] = useState([]);
     const [loading, setLoading] = useState(true);
+    const[loadingMore , setLoadingMore] = useState(false);
+    const [hasMore , setHasMore] = useState(true);
+    const [page , setPage] = useState(1);
     const [error, setError] = useState("");
     const [comments, setComments] = useState({});
     const [openComment, setopenComment] = useState(null);
     const [commentData, setCommentData] = useState({ content: "" });
+    const [searchQuery , setSearchQuery] = useState("");
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchTips = async () => {
-            try {
-                const res = await fetch(`${import.meta.env.VITE_API_URL}/tips`, {
+    const fetchTips = useCallback(async (pageNum , append = false) =>{
+        try{
+            if(append) setLoadingMore(true);
+            else setLoading(true);
+
+            const res = await fetch(
+                `${import.meta.env.VITE_API_URL}/tips?page=${pageNum}&limit=${LIMIT}`,
+                {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
-                });
+                }
+            );
 
                 if (res.status === 401 || res.status === 403) {
                     localStorage.removeItem("token");
@@ -28,18 +39,29 @@ export function useTips() {
                     return;
                 }
                 const data = await res.json();
-                setTips(data.tips);
+                const newTips =  data.tips || [];
+
+                setTips((prev) => (append ? [...prev, ...newTips] : newTips));
+                setHasMore(newTips.length === LIMIT);
             } catch (err) {
                 console.log(err);
                 setError("Something went wrong while fetching tips");
             }
             finally {
                 setLoading(false);
+                setLoadingMore(false);
             }
-        };
 
-        fetchTips();
-    }, []);
+    }, [navigate]);
+    useEffect(() =>{
+        fetchTips(1 , false);
+    }, [fetchTips]);
+
+        const handleLoadMore = () => {
+        const nextPage = page + 1;
+        setPage(nextPage);
+        fetchTips(nextPage, true);
+    };
 
     const handleLike = async (tip_id) => {
         setTips((prev) => 
@@ -152,9 +174,20 @@ export function useTips() {
         }
     };
 
+    const filteredTips = searchQuery.trim()
+        ? tips.filter((tip) =>
+            tip.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            tip.category?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            tip.content?.toLowerCase().includes(searchQuery.toLowerCase())
+          )
+        : tips;
+
     return {
-        tips,
+        tips: filteredTips,
         loading,
+        loadingMore,
+        hasMore,
+        handleLoadMore,
         error,
         setError,
         handleLike,
@@ -166,5 +199,7 @@ export function useTips() {
         handleCommentClick,
         handleCommentChange,
         handleCommentPost,
+        searchQuery,
+        setSearchQuery,
     };
 };

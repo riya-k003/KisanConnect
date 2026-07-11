@@ -17,6 +17,13 @@ function Login() {
     try {
       const data = await authService.login(formData);
       localStorage.setItem("token", data.token);
+
+      const decoded = JSON.parse(atob(data.token.split(".")[1]));
+      localStorage.setItem("role" , decoded.role);
+      localStorage.setItem("name" , decoded.name);
+
+      window.location.href = "/tips";
+
       navigate("/tips");
     } catch (error) {
       console.log(error);

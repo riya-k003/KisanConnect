@@ -1,4 +1,5 @@
 import { useTips } from "../hooks/useTips";
+import { useNavigate } from "react-router-dom";
 import TipCard from "../components/tips/TipCard.jsx";
 import TipForm from "../components/tips/TipForm.jsx";
 import   SidebarButton   from "../components/Layout/SidebarButton.jsx";
@@ -10,13 +11,18 @@ import {
   Bookmark,
   StickyNote,
   Users,
-  Sprout
+  Sprout,
+  Search,
+  Bot,
 } from "lucide-react";
 
 function TipsPage() {
   const {
     tips,
     loading,
+    loadingMore,
+    hasMore,
+    handleLoadMore,
     error,
     setError,
     handleLike,
@@ -28,7 +34,11 @@ function TipsPage() {
     handleCommentClick,
     handleCommentChange,
     handleCommentPost,
+    searchQuery,
+    setSearchQuery,
   } = useTips();
+
+  const navigate = useNavigate();
 
   return (
   <div className="min-h-screen bg-[#F4F6F0]">
@@ -44,6 +54,7 @@ function TipsPage() {
           <SidebarButton icon={StickyNote} />
           <SidebarButton icon={Users} />
           <SidebarButton icon={User} />
+          <SidebarButton icon={Bot} onClick={() => navigate("/ai-assistant")} />
       </nav>
     </header>
 
@@ -92,6 +103,9 @@ function TipsPage() {
                 <SidebarButton icon={User}>
                   Profile
                 </SidebarButton>
+                <SidebarButton icon={Bot} onClick={() => navigate("/ai-assistant")}>
+  AI Assistant
+</SidebarButton>
               </nav>
               </div>
                <div className="flex justify-center mt-auto pt-8 ">
@@ -141,9 +155,22 @@ function TipsPage() {
               <p className="text-[#667366] text-[15px] mt-1">
                 Share knowledge. Help farmers grow.
               </p>
+
+              {/* Search bar */}
+<div className="relative mb-6">
+  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#999] w-4 h-4" />
+  <input
+    type="text"
+    placeholder="Search tips by title, category..."
+    value={searchQuery}
+    onChange={(e) => setSearchQuery(e.target.value)}
+    className="w-full pl-11 pr-4 py-3 rounded-2xl border border-[#E8EDE0] bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#57B847]"
+  />
+</div>
           </div>
         <div className="flex gap-8 items-start w-full">
         <div className="flex-1 min-w-0 flex flex-col">
+          
             {/* Create tips */}
             <div className="bg-white border border-[#E8EDE0] rounded-3xl p-6 shadow-sm mb-8">
               <TipForm 
@@ -179,6 +206,15 @@ function TipsPage() {
             ))
           )}
             </div>
+            {!loading && hasMore && (
+  <button
+    onClick={handleLoadMore}
+    disabled={loadingMore}
+    className="mx-auto mt-4 px-6 py-2.5 rounded-2xl border border-[#E8EDE0] bg-white text-[#2F6B3F] font-medium hover:bg-[#F1F6EC] transition-colors disabled:opacity-50"
+  >
+    {loadingMore ? "Loading..." : "Load More"}
+  </button>
+)}
             </div>
             {/* right sidebar */}
           <aside className="hidden xl:flex flex-col w-56 shrink-0 sticky top-6 self-start bg-[#F7F8F3] border border-[#E8EDE0] rounded-3xl p-6 shadow-sm gap-4">

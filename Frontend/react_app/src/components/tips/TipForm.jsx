@@ -3,7 +3,7 @@ import style from "../../styles/tips.module.css";
 import {validateTip} from "../../utils/validateTip"
 import imageCompression from "browser-image-compression";
 
-function TipForm({onSubmit  , error , setError}){
+function TipForm({tip , onSubmit  , error , setError}){
 
 const [tipData , setTipData] = useState({
     title : "",
@@ -80,8 +80,26 @@ console.log("image:", formData.get("image"));
 
     return(
         <>
-         <div className="createTip">
+         <div className="flex flex-col gap-4 border border-red-500">
               {error && <p className={style.errorBox}>⚠️{error}</p>}
+
+               <div
+            className="
+            h-14
+            w-14
+            rounded-full
+            bg-green-100
+            flex
+            items-center
+            justify-center
+            text-[#2F6B3F]
+            font-bold
+            text-xl
+          "
+          >
+           {localStorage.getItem("name")?.charAt(0)?.toUpperCase()}
+          </div>
+             
                 <input
                   name="title"
                   type="text"

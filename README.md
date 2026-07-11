@@ -261,3 +261,5 @@ Riya Kashyap
 ## 🌟 Final Note
 
 KisanConnect bridges the gap between farmers and learners through a simple, scalable, and impactful platform — now with AI that speaks the farmer's language.
+
+## Deployment
