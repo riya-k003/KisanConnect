@@ -14,6 +14,7 @@ import {
   Sprout,
   Search,
   Bot,
+  Bell,
 } from "lucide-react";
 
 function TipsPage() {
@@ -147,27 +148,44 @@ function TipsPage() {
         {/* feed section*/}
         <main className="flex-1 min-w-0 flex flex-col gap-6">
           {/* header */}
-          <div>
-            <h1 className="text-[32px] font-bold text-[#112214] tracking-tight flex items-center gap-2">
-              Farmer Tips <span className="text-2xl">🌿</span>
-              </h1>
+         <div>
+  <div className="flex items-center justify-between gap-4 flex-wrap">
+    <div>
+      <h1 className="text-[32px] font-bold text-[#112214] tracking-tight flex items-center gap-2">
+        Farmer Tips <span className="text-2xl">🌿</span>
+      </h1>
+      <p className="text-[#667366] text-[15px] mt-1">
+        Share knowledge. Help farmers grow.
+      </p>
+    </div>
 
-              <p className="text-[#667366] text-[15px] mt-1">
-                Share knowledge. Help farmers grow.
-              </p>
+    <div className="flex items-center gap-4">
+      {/* Search bar */}
+      <div className="relative w-[290px]">
+        <input
+          type="text"
+          placeholder="Search tips..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full h-11 pl-4 pr-11 rounded-full border border-[#E8EDE0] bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#57B847] transition-shadow"
+        />
+        <Search className="absolute right-4 top-1/2 -translate-y-1/2 text-[#999] w-4 h-4" />
+      </div>
 
-              {/* Search bar */}
-<div className="relative mb-6">
-  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#999] w-4 h-4" />
-  <input
-    type="text"
-    placeholder="Search tips by title, category..."
-    value={searchQuery}
-    onChange={(e) => setSearchQuery(e.target.value)}
-    className="w-full pl-11 pr-4 py-3 rounded-2xl border border-[#E8EDE0] bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#57B847]"
-  />
+      {/* Notification bell */}
+      <button className="relative h-11 w-11 flex items-center justify-center rounded-full hover:bg-[#F1F6EC] transition-colors">
+        <Bell className="w-5 h-5 text-[#333]" />
+        {/* remove this span if there are no unread notifications */}
+        <span className="absolute top-1.5 right-2 h-2 w-2 bg-[#F4A93B] rounded-full"></span>
+      </button>
+
+      {/* Profile avatar */}
+      <div className="h-11 w-11 rounded-full overflow-hidden bg-green-100 flex items-center justify-center text-[#2F6B3F] font-bold text-lg shrink-0">
+        {localStorage.getItem("name")?.charAt(0)?.toUpperCase() || "?"}
+      </div>
+    </div>
+  </div>
 </div>
-          </div>
         <div className="flex gap-8 items-start w-full">
         <div className="flex-1 min-w-0 flex flex-col">
           
