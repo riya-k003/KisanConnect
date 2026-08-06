@@ -586,7 +586,7 @@ User types → Click Post → Send request → Backend saves → UI updates
 ## 📡 API Call (Frontend)
 
 ```js
-fetch(`http://localhost:3000/tips/${tip_id}/comments`, {
+fetch(`https://kisanconnect-rorg.onrender.com/tips/${tip_id}/comments`, {
   method: "POST",
   headers: {
     "Content-Type": "application/json",

@@ -1,5 +1,6 @@
 import { timeAgo } from "../../utils/timeAgo";
 import CommentSection from "./CommentSection";
+import TTS from "../Speech/TTs.jsx";
 import {Earth , Trash2 , Heart , MessageCircle , Bookmark , Share , SendHorizontal , Smile} from "lucide-react"
 
 
@@ -110,7 +111,7 @@ function TipCard({
           >
             {tip.title}
           </h3>
-
+         <TTS tip={tip} />
           <p
             className="
             mt-5

@@ -76,7 +76,7 @@ npm install
 Create a `.env` file in your frontend root:
 
 ```
-VITE_API_URL=http://localhost:3000
+VITE_API_URL=https://kisanconnect-rorg.onrender.com
 ```
 
 Create a `.env` file in your backend root:
