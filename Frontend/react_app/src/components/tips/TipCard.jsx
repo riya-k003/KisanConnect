@@ -1,6 +1,6 @@
 import { timeAgo } from "../../utils/timeAgo";
 import CommentSection from "./CommentSection";
-import TTS from "../Speech/TTs.jsx";
+import TTS from "../Speech/TTS.jsx";
 import {Earth , Trash2 , Heart , MessageCircle , Bookmark , Share , SendHorizontal , Smile} from "lucide-react"
 
 
