@@ -6,15 +6,18 @@ function TTS({tip}){
      const [isSpeaking , setIsSpeaking] = useState(false);
 
      const handleSpeak = ()=>{
+
         const willSpeak = !isSpeaking;
         setIsSpeaking(willSpeak);
         if(willSpeak){
+            window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(tip.content);
             utterance.lang = detectLang(utterance.text);
             utterance.rate = 0.7;
-            utterance.onend = ()=>{
-                setIsSpeaking(false);
-            }
+            utterance.onstart = () => setIsSpeaking(true);
+            utterance.onend = () => setIsSpeaking(false);
+            utterance.onerror = () => setIsSpeaking(false);
+            
             speechSynthesis.speak(utterance);
         }
         else{
@@ -36,7 +39,7 @@ function TTS({tip}){
          return(
             <div className="flex items-center gap-2">
                 <button onClick={handleSpeak} className="flex items-center gap-2 text-[16px] text-2xl text-[#2F6B3F]]">
-                    {isSpeaking ? <VolumeX size={26}/> : <Volume size={26}/>}
+                    {isSpeaking ? <VolumeX size={26}  className="text-[#FF0000]"/> : <Volume size={26} />}
                 </button>
             </div>
          )
