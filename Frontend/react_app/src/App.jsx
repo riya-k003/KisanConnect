@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes , Route} from "react-router-dom";
+import {Routes , Route} from "react-router-dom";
 import TipsPage from "./pages/TipsPage.jsx";
 import Authpage from "./pages/Authpage.jsx";
 import ProtectedRoute from "./components/common/ProtectedRoute";
@@ -9,7 +9,7 @@ import AiPage from "./pages/AiPage.jsx";
 function App() {
   
   return (
-    <BrowserRouter>
+   <>
       {/* <header>
         <h1 className="head">KisanConnect</h1>
         </header> */}
@@ -31,9 +31,8 @@ function App() {
       }
       />
           </Routes>
-
         </div>
-    </BrowserRouter>
+        </>
   );
       
 }

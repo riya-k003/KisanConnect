@@ -1,6 +1,8 @@
-function SidebarButton({ icon: Icon, children, active }) {
+function SidebarButton({ icon: Icon, children, active, onClick}) {
   return (
     <button
+    type='button'
+    onClick={onClick}
       className={`
         flex items-center gap-3
         h-[4.5vh]

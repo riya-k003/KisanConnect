@@ -1,8 +1,8 @@
 import { useTips } from "../hooks/useTips";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import TipCard from "../components/tips/TipCard.jsx";
 import TipForm from "../components/tips/TipForm.jsx";
-import   SidebarButton   from "../components/Layout/SidebarButton.jsx";
+import SidebarButton   from "../components/Layout/SidebarButton.jsx";
 import motivationBg from "../assets/motivation-bg.png"
 import {
   Home,
@@ -55,7 +55,7 @@ function TipsPage() {
           <SidebarButton icon={StickyNote} />
           <SidebarButton icon={Users} />
           <SidebarButton icon={User} />
-          <SidebarButton icon={Bot} onClick={() => navigate("/ai-assistant")} />
+          <SidebarButton icon={Bot} onClick={() => navigate('/ai-assistant')} />
       </nav>
     </header>
 
@@ -64,7 +64,7 @@ function TipsPage() {
 <div className="max-w-[1400px] mx-auto px-6 py-6 flex gap-10 items-start">
 
         {/* Left sidebar */}
-        <aside className="hidden lg:flex flex-col w-[280px] min-h-[calc(100vh-40px)] sticky top-4 bg-white border border-[#E8EDE0] rounded-[32px] px-7 py-8 shadow-sm
+        <aside className="hidden lg:flex flex-col w-[280px] min-h-[calc(110vh-40px)] sticky top-3 bg-white border border-[#E8EDE0] rounded-[32px] px-7 py-8 shadow-sm justify-evenly
 ">
   <div className=" h-[15vh] rounded-3xl content-center">
             <h2 className="flex items-center gap-4 m text-2xl font-bold text-[#2F6B3F]">
@@ -104,12 +104,12 @@ function TipsPage() {
                 <SidebarButton icon={User}>
                   Profile
                 </SidebarButton>
-                <SidebarButton icon={Bot} onClick={() => navigate("/ai-assistant")}>
+                <SidebarButton icon={Bot} onClick={() => navigate('/ai-assistant')}>
   AI Assistant
 </SidebarButton>
               </nav>
               </div>
-               <div className="flex justify-center mt-auto pt-8 ">
+               <div className="flex justify-center mt-auto pt-10 ">
   <div
     className="
     h-[33vh]
