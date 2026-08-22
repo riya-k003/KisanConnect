@@ -109,7 +109,7 @@ function TipsPage() {
 </SidebarButton>
               </nav>
               </div>
-               <div className="flex justify-center mt-auto pt-10 ">
+               <div className="flex justify-center mt-10 pt-10 ">
   <div
     className="
     h-[33vh]

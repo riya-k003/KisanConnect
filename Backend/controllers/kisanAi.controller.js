@@ -13,7 +13,7 @@ const askKisanAI = async (req , res)=>{
 
     try{
         const response = await client.chat.completions.create({
-            model: "llama-3.3-70b-versatile",
+            model: "openai/gpt-oss-120b",
             max_tokens:1024,
             messages: [
                 {
@@ -21,7 +21,7 @@ const askKisanAI = async (req , res)=>{
                     content:`You are KissanConnect's  AI assistance for Indian Farmers.
             - Always reply in ${language ===  "hi" ? "Hindi (Devnagri script)" : "English"}
             - Give practical, simple advice relevant to Indian farming
-            - Topics: crop diseses , pests , sowin , harvesting , fertilizers , irrigation, government schemes 
+            - Topics: crop diseases , pests , sowing , harvesting , fertilizers , irrigation, government schemes 
             - Keep answers under 150 words
             - USe simple language a farmer can understand`,
                 },
@@ -31,8 +31,8 @@ const askKisanAI = async (req , res)=>{
             ], 
         });
 
-        const reply = response.choices[0].message.content;
-        res.json({reply});
+        const reply = response.choices[0]?.message?.content || "";
+    res.json({ reply });
     }
     catch(error){
         console.error("Groq error:" , error);
