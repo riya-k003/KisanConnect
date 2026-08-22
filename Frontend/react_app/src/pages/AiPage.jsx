@@ -1,68 +1,68 @@
+import React, { useState } from "react";
+import { MessageCircle, Sprout, X } from "lucide-react";
 import KisanChat from "../components/KisanChat";
-import {useState} from "react";
-import {MessageCircle , X} from "lucide-react";
 
-function AiPage() {
-  const [isOpn , setOpn] = useState(false);
+export default function AiPage() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div style={{
-      minHeight: "100vh",
-      background: "#F5F5F5",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: "20px",
-    }}
+    <main
+      data-testid="ai-page-root"
+      className="relative min-h-screen overflow-hidden bg-[#f4f7f5] text-[#1a2e22]"
     >
-      {!isOpn && (
-      <h1 style={{
-        color: "#1D9E75",
-        fontFamily: "sans-serif",
-        marginBottom: "20px",
-        fontSize: "24px",
-        fontWeight: "600",
-      }}>
-        🌾 KissanConnect AI सहायक
-      </h1>
-      )}
-      {isOpn && (
-        <div 
-        style={{
-          position: "fixed",
-          bottom: "90px",
-          right:"24px",
-          zIndex:999,
-        }}
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(29,158,117,0.08),transparent_42%,rgba(245,185,74,0.08))]" />
+
+      <section className="relative flex min-h-screen items-center justify-center px-5 py-16 text-center">
+        <div className="max-w-xl">
+          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-700 text-white shadow-lg shadow-emerald-900/15">
+            <Sprout data-testid="page-sprout-icon" size={28} />
+          </div>
+
+          <p
+            data-testid="page-eyebrow"
+            className="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-emerald-700"
+          >
+            KissanConnect
+          </p>
+
+          <h1
+            data-testid="page-title"
+            className="text-3xl font-bold tracking-tight text-emerald-950 sm:text-5xl"
+          >
+            आपका अपना AI कृषि सहायक
+          </h1>
+
+          <p
+            data-testid="page-description"
+            className="mx-auto mt-4 max-w-md text-sm leading-7 text-[#5a7365] sm:text-base"
+          >
+            मौसम, फसल, कीट और मंडी भाव से जुड़े सवालों के लिए नीचे दिए गए सहायक से पूछें।
+          </p>
+        </div>
+      </section>
+
+      {isOpen && (
+        <div
+          data-testid="chat-floating-wrapper"
+          className="chat-panel-anchor fixed bottom-[5.75rem] right-2 z-40 sm:right-6"
         >
-      <KisanChat />
-    </div>
+          <KisanChat />
+        </div>
       )}
-       <button
-        onClick={() => setOpn((prev) => !prev)}
-        style={{
-          position: "fixed",
-          bottom: "24px",
-          right: "24px",
-          width: "56px",
-          height: "56px",
-          borderRadius: "50%",
-          background: "#1D9E75",
-          color: "white",
-          border: "none",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          zIndex: 1000,
-        }}
-        aria-label="Toggle AI Assistant"
+
+      <button
+        data-testid="floating-ai-toggle-btn"
+        type="button"
+        aria-label={isOpen ? "सहायक बंद करें" : "AI सहायक खोलें"}
+        onClick={() => setIsOpen((previous) => !previous)}
+        className="fixed bottom-5 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full border-2 border-white/80 bg-emerald-700 text-white shadow-[0_10px_28px_rgba(29,158,117,0.35)] transition-transform duration-200 hover:scale-105 active:scale-95 sm:right-6"
       >
-        {isOpn ? <X size={26} /> : <MessageCircle size={26} />}
+        {isOpen ? (
+          <X data-testid="close-chat-icon" size={25} />
+        ) : (
+          <MessageCircle data-testid="open-chat-icon" size={26} />
+        )}
       </button>
-    </div>
+    </main>
   );
 }
-
-export default AiPage;
