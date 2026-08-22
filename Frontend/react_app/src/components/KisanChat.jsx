@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import askKisanAI from "../services/kisanAI";
+import { speakText } from "../utils/ttsUtil";
+import ReactMarkdown from "react-markdown";
+import TTS from "./Speech/TTS.jsx";
 
 const quickQuestions = {
   hi: [
@@ -43,14 +46,17 @@ function KisanChat() {
     try {
       const reply = await askKisanAI(userMsg, language);
       setMessages((prev) => [...prev, { role: "bot", text: reply }]);
-    } catch (err) {
+      
+          } catch (err) {
+      const errorText = language ==="hi" ? "माफ़ करें, कुछ गड़बड़ हुई। थोड़ी देर बाद कोशिश करें।" :"Sorry, something went wrong. Please try again later.";
       setMessages((prev) => [
         ...prev,
         {
           role: "bot",
-          text: "माफ़ करें, कुछ गड़बड़ हुई। थोड़ी देर बाद कोशिश करें।",
-        },
+          text: errorText,
+        }
       ]);
+      
     } finally {
       setLoading(false);
     }
@@ -89,8 +95,19 @@ function KisanChat() {
             key={i}
             style={msg.role === "user" ? styles.userMsg : styles.botMsg}
           >
-            {msg.text}
-          </div>
+            <div>
+        {msg.role === "bot" ? (
+          <ReactMarkdown>{msg.text}</ReactMarkdown>
+        ) : (
+          msg.text
+        )}
+      </div>
+            {msg.role === "bot" && (
+      <div style={{ marginTop: "6px" }}>
+        <TTS tip={{ content: msg.text }} />
+      </div>
+        )}
+        </div>
         ))}
         {loading && (
           <div style={styles.botMsg}>
