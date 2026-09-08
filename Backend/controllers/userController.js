@@ -10,7 +10,8 @@ const transporter = nodemailer.createTransport({
     auth: {
         user:process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS  //Gmail "App Password" , normal password nahi
-    }
+    },
+    family:4
 });
 
 //helper: random 6-digit OTP generate kane ke liye
