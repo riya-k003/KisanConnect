@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import {Volume , VolumeX} from 'lucide-react';
+import { detectLang } from '../../utils/ttsUtil';
 
 
 function TTS({tip}){
@@ -24,17 +25,6 @@ function TTS({tip}){
             speechSynthesis.cancel();
         }
      }
-
-     const detectLang = (text)=>{
-        const devanagariCount = (text.match(/[\u0900-\u097F]/g) || []).length;
-        const totalCount = text.replace(/\s/g, "").length;
-        const ratio = devanagariCount / totalCount;
-
-        if(ratio > 0.5){
-            return "hi-IN";
-        }
-        return "en-IN";
-         }
 
          return(
             <div className="flex items-center gap-2">

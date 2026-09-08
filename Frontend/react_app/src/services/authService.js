@@ -11,5 +11,8 @@ export const authService ={
     logout : async ()=>{
         localStorage.removeItem("token");
     },
+    verifyOtp : async (data)=>{
+        return apiRequest("/api/users/verify-otp" , "POST" , data);
+    }
 
 };

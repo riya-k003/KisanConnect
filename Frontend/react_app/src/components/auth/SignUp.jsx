@@ -17,10 +17,11 @@ function SignUp() {
     e.preventDefault();
     setError("");
     try {
-      await authService.register(formData);
-      navigate("/tips");
+      const response = await authService.register(formData);
+      navigate("/verify-otp" , { state : {userId : response.userId}});
     } catch (error) {
       console.log(error);
+      setError(error.message || "Something went wrong during registration.");
     }
   };
 
