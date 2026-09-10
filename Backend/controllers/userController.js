@@ -1,23 +1,80 @@
 require("dotenv").config();
+const { BrevoClient } = require("@getbrevo/brevo");
 const db = require("../config/db.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
 
-//email bhejne ke liye transporter - ek bar create setup , reuse hota hai
-const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user:process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS  //Gmail "App Password" , normal password nahi
-    },
-    family:4
+
+const brevo = new BrevoClient({
+    apiKey: process.env.BREVO_API_KEY
 });
+
+ const sendOTPEmail = async (recipientEmail, otp) => {
+  const emailPayload = {
+    sender: {
+      name: "KissanConnect",
+      email: process.env.BREVO_SENDER_EMAIL
+    },
+
+    to: [
+      {
+        email: recipientEmail
+      }
+    ],
+
+    subject: "Your KissanConnect Verification Code",
+
+    htmlContent: `
+      <div style="
+        font-family: Arial, sans-serif;
+        padding: 30px;
+        max-width: 450px;
+        margin: auto;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+      ">
+        
+        <h2>Verify Your Email</h2>
+
+        <p>
+          Please use the following OTP to verify your KissanConnect account.
+        </p>
+
+        <div style="
+          padding: 18px;
+          text-align: center;
+          font-size: 28px;
+          font-weight: bold;
+          letter-spacing: 6px;
+          margin: 25px 0;
+          background: #f7f9fc;
+          border-radius: 6px;
+        ">
+          ${otp}
+        </div>
+
+        <p>
+          This OTP will expire in <b>5 minutes</b>.
+        </p>
+
+        <p style="font-size: 12px; color: gray;">
+          If you didn't request this verification, you can safely ignore this email.
+        </p>
+
+      </div>
+    `
+  };
+
+  const response = await  brevo.transactionalEmails.sendTransacEmail(emailPayload);
+
+  return response;
+};
 
 //helper: random 6-digit OTP generate kane ke liye
 function generateOTP(){
-    return Math.floor(100000 + Math.random() * 900000).toString();
+return Math.floor(100000 + Math.random() * 900000).toString();
 }
+
 
 exports.registerUser = async (req, res) => {
     console.log("register api hit");
@@ -56,13 +113,9 @@ exports.registerUser = async (req, res) => {
       const otpSql = "INSERT INTO Otp_verifications( user_id , otp_code , purpose , expires_at) VALUES (? , ? , ? , DATE_ADD(NOW() , INTERVAL 5 MINUTE))";
       await db.query(otpSql , [userId , otp , "signup"]);
 
-      //Email behjo
-      await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: email,
-        subject: "KissanConnect - verify your account",
-        text: `Your OTP is ${otp} , It expires in 5 minutes.`
-      });
+        // Send OTP using Brevo
+        await sendOTPEmail(email, otp);
+
 
             return res.status(201).json({
                 message: "User registered successfully",
