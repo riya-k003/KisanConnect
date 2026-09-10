@@ -14,6 +14,7 @@
   "dependencies": {
     "@angular/cli": "^19.2.21",
     "@anthropic-ai/sdk": "^0.99.0",
+    "@getbrevo/brevo": "^6.0.3",
     "bcrypt": "^6.0.0",
     "cloudinary": "^1.41.3",
     "cors": "^2.8.6",
