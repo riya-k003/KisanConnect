@@ -23,6 +23,7 @@ function KisanChat() {
     {
       role: "bot",
       text: "🌾 नमस्ते किसान भाई! मैं KissanConnect का AI सहायक हूँ। आप मुझसे फसल, खाद, सिंचाई या सरकारी योजनाओं के बारे में पूछ सकते हैं।",
+      type: "greeting"
     },
   ]);
 
@@ -40,39 +41,29 @@ function KisanChat() {
 
     if (!userMsg || loading) return;
 
+    const conversationHistory = messages
+    .filter((msg) => msg.type !== "greeting" && msg.type !== "error")
+    .slice(-6)
+    .map((msg) => ({
+      role : msg.role === "bot" ? "assistant" : "user",
+      content: msg.text,
+    }));
+
     setInput("");
     setMessages((prev) => [
       ...prev,
       {
         role: "user",
         text: userMsg,
+        type: "question"
       },
     ]);
 
     setLoading(true);
 
     try {
-      const reply = await askKisanAI(userMsg, language);
+      const reply = await askKisanAI(userMsg, language , conversationHistory);
 
-      if (reply.type === "error") {
-  const errorText =
-    language === "hi"
-      ? "माफ़ करें, कुछ गड़बड़ हुई। थोड़ी देर बाद कोशिश करें।"
-      : "Sorry, something went wrong. Please try again later.";
-
-  setMessages((prev) => [
-    ...prev,
-    {
-      role: "bot",
-      text: errorText,
-      type: "error",
-    },
-  ]);
-
-  return;
-}
-
-      
       setMessages((prev) => [
         ...prev,
         {
@@ -93,6 +84,7 @@ function KisanChat() {
         {
           role: "bot",
           text: errorText,
+          type: "error"
         },
       ]);
     } finally {

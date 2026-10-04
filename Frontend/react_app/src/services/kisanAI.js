@@ -1,9 +1,9 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
-const askKisanAI = async (message, language = "hi") => {
+const askKisanAI = async (message, language = "hi" , conversationHistory) => {
   const response = await fetch(`${API_BASE_URL}/api/kisanai/ask`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message, language }),
+    body: JSON.stringify({ message, language , conversationHistory }),
   });
 
   const data = await response.json();
