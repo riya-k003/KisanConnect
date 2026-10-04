@@ -7,7 +7,7 @@ const askKisanAI = async (message, language = "hi") => {
   });
 
   const data = await response.json();
-  return data.reply;
+  return data;
 };
 
 export default askKisanAI;

@@ -54,13 +54,34 @@ function KisanChat() {
     try {
       const reply = await askKisanAI(userMsg, language);
 
+      if (reply.type === "error") {
+  const errorText =
+    language === "hi"
+      ? "माफ़ करें, कुछ गड़बड़ हुई। थोड़ी देर बाद कोशिश करें।"
+      : "Sorry, something went wrong. Please try again later.";
+
+  setMessages((prev) => [
+    ...prev,
+    {
+      role: "bot",
+      text: errorText,
+      type: "error",
+    },
+  ]);
+
+  return;
+}
+
+      
       setMessages((prev) => [
         ...prev,
         {
           role: "bot",
-          text: reply,
+          text: reply.reply,
+          type: reply.type
         },
       ]);
+      
     } catch (err) {
       const errorText =
         language === "hi"
