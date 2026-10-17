@@ -11,6 +11,32 @@ const askKisanAI = async (req , res)=>{
         return res.status(400).json({error: "Message is required"});
     }
 
+    if(conversationHistory !== undefined && !Array.isArray(conversationHistory)){
+        return res.status(400).json({
+            error: "Conversation history must be an array of messages"
+        });
+    }
+    if(conversationHistory && conversationHistory.length > 10){
+        return res.status(400).json({
+            error: "Conversation history cannot exceed 10 messages"
+
+    });
+}
+const cleanHistory = (conversationHistory || [])
+    .filter((item)=>
+    item &&
+typeof item === "object" &&
+!Array.isArray(item)&&
+["user" , "assistant"].includes(item.role) &&
+typeof item.content === "string"
+)
+  .slice(-6)
+  .map((item) => ({
+    role: item.role,
+    content: item.content.slice(0, 2000)
+}));
+console.log("Cleaned history:" , cleanHistory);
+
     try{
         const response = await client.chat.completions.create({
             model: "openai/gpt-oss-120b",
@@ -100,7 +126,7 @@ Do not wrap the JSON in code blocks.
 Do not add explanations outside the JSON `,
                 },
 
-                ...(conversationHistory || []),
+                ...(cleanHistory || []),
                 {role: "user",
                 content: message,
             },

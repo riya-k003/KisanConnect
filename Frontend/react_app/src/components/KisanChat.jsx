@@ -63,6 +63,7 @@ function KisanChat() {
 
     try {
       const reply = await askKisanAI(userMsg, language , conversationHistory);
+      reply.type === "error" && console.error("AI error:" ,  reply.reply);
 
       setMessages((prev) => [
         ...prev,
@@ -469,6 +470,7 @@ const styles = {
 
   messageContent: {
     overflowWrap: "anywhere",
+    whiteSpace: "pre-wrap"
   },
 
   ttsWrapper: {
