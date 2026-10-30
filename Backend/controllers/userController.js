@@ -85,7 +85,6 @@ exports.registerUser = async (req, res) => {
         const existingUserSql = "SELECT id , is_verified FROM users WHERE email = ?";
         const [existrow] = await db.query(existingUserSql , [email]);
 
-          const hashedPassword = await bcrypt.hash(password, 10);
           let userId;
 
         if(existrow.length > 0){
@@ -96,20 +95,44 @@ exports.registerUser = async (req, res) => {
                     message: "Email already exists"
                 })
             }
+
             else{
+                   //check if user can ask for otp or not : 24 housr me 5 seh jayada otp request nahi kar sakta
+        const otpcountSql = "SELECT COUNT(*) AS times FROM Otp_verifications WHERE user_id = ?  AND  purpose =? AND created_at >= NOW() - INTERVAL 24 HOUR";
+        const [otpCountResult] = await db.query(otpcountSql , [existUser.id , "signup"]);
+        const otpCount = otpCountResult[0].times;
+
+                if(otpCount >= 5){
+            return res.status(429).json({
+                message: "You have exceeded the maximum number of otp requests . Please try again after 24 hours."
+            })
+        }
+        else{
+             const hashedPassword = await bcrypt.hash(password, 10);
+
                 //unverified : row rakho bas details update kari heh
                 const updateSql = "UPDATE users SET name =? ,  password = ? , role = ? WHERE id = ?";
                 await db.query(updateSql , [name , hashedPassword , role , existUser.id]);
 
             }
+        }
+       
               userId = existUser.id;
         }
+
         else{
+             const hashedPassword = await bcrypt.hash(password, 10);
             //new user create karo
     const sql = "INSERT INTO users(name , email , password  , role) VALUES (? , ? , ? , ?)";
       const [result] = await  db.query(sql, [name, email, hashedPassword, role]);
              userId = result.insertId;
         }
+
+        //naya otp generate seh phele purana otp ko used mark karo
+        const markUsedSql = "UPDATE Otp_verifications SET is_used = TRUE WHERE user_id = ? AND purpose = ? AND is_used =  FALSE";
+        await db.query(markUsedSql , [userId , "signup"]);
+
+
 
       //Otp generate and store
       const otp = generateOTP();
