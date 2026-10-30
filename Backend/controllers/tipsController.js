@@ -206,3 +206,57 @@ exports.deleteTip =  async(req , res)=>{
             });
         }
 };
+
+exports.getMyProfile = async (req, res) => {
+    const user_id = req.user.id;
+ 
+    const page = parseInt(req.query.page) || 1;
+    // limit par upper cap, taaki koi bahut bada number bhej kar DB par bojh na daale
+    const limit = Math.min(parseInt(req.query.limit) || 20, 50);
+    const offset = (page - 1) * limit;
+ 
+    const tipsSql = `
+    SELECT
+        t.tip_id,
+        t.title,
+        t.content,
+        t.category,
+        t.created_at,
+        t.image_url,
+        u.name AS farmer_name,
+        (SELECT COUNT(*) FROM likes l WHERE l.tip_id = t.tip_id) AS likes_count,
+        (SELECT COUNT(*) FROM comments cm WHERE cm.tip_id = t.tip_id) AS comments_count,
+        EXISTS (
+            SELECT 1 FROM likes ul WHERE ul.tip_id = t.tip_id AND ul.user_id = ?
+        ) AS isliked
+    FROM tips t
+    JOIN users u ON t.farmer_id = u.id
+    WHERE t.farmer_id = ?
+    ORDER BY t.tip_id DESC
+    LIMIT ? OFFSET ?
+    `;
+ 
+    try {
+        // verified ka nishaan token se nahi, DB se aata hai, kyunki token login ke waqt
+        // ban gaya tha aur is_verified baad me badal sakta hai
+        const [users] = await db.query(
+            "SELECT id, name, email, is_verified FROM users WHERE id = ?",
+            [user_id]
+        );
+ 
+        if (users.length === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+ 
+        const [tips] = await db.query(tipsSql, [user_id, user_id, limit, offset]);
+ 
+        res.json({
+            user: users[0],
+            page,
+            tips
+        });
+    } catch (err) {
+        console.log("Profile error:", err);
+        res.status(500).json({ message: "Server error" });
+    }
+};

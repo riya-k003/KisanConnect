@@ -85,7 +85,11 @@ exports.registerUser = async (req, res) => {
         const existingUserSql = "SELECT id , is_verified FROM users WHERE email = ?";
         const [existrow] = await db.query(existingUserSql , [email]);
 
+          const hashedPassword = await bcrypt.hash(password, 10);
+          let userId;
+
         if(existrow.length > 0){
+            
             const existUser = existrow[0];
             if(existUser.is_verified === 1){
                 return res.status(400).json({
@@ -93,19 +97,19 @@ exports.registerUser = async (req, res) => {
                 })
             }
             else{
-                //user exists but verified nahi heh toh dleete kar dengeh
-                const deleteSql = "DELETE FROM users WHERE id = ?";
-                 await db.query(deleteSql , [existUser.id]);
+                //unverified : row rakho bas details update kari heh
+                const updateSql = "UPDATE users SET name =? ,  password = ? , role = ? WHERE id = ?";
+                await db.query(updateSql , [name , hashedPassword , role , existUser.id]);
 
             }
+              userId = existUser.id;
         }
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-
+        else{
+            //new user create karo
     const sql = "INSERT INTO users(name , email , password  , role) VALUES (? , ? , ? , ?)";
       const [result] = await  db.query(sql, [name, email, hashedPassword, role]);
-
-      const userId = result.insertId;
+             userId = result.insertId;
+        }
 
       //Otp generate and store
       const otp = generateOTP();

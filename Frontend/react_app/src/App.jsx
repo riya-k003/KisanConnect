@@ -4,6 +4,7 @@ import Authpage from "./pages/Authpage.jsx";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import AiPage from "./pages/AiPage.jsx";
 import Verify_otp from "./components/auth/Verify_otp.jsx";
+import ProfilePage from "./pages/ProfilePage.jsx";
 
 
 
@@ -32,7 +33,14 @@ function App() {
       }
       />
           <Route path="/verify-otp" element={<Verify_otp/>}/>
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <ProfilePage/>
+            </ProtectedRoute>
+          }
+          />
           </Routes>
+          
         </div>
         </>
   );

@@ -48,5 +48,6 @@ export const tipsService = {
             clearTimeout(timeoutId);
         }
        
-    }
+    },
+    getMyProfile : () => apiRequest("/tips/mine" , "GET"),
 };

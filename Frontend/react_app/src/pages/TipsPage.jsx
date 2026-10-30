@@ -4,6 +4,7 @@ import TipCard from "../components/tips/TipCard.jsx";
 import TipForm from "../components/tips/TipForm.jsx";
 import SidebarButton   from "../components/Layout/SidebarButton.jsx";
 import motivationBg from "../assets/motivation-bg.png"
+import {Link} from "react-router-dom";
 import {
   Home,
   Flame,
@@ -16,6 +17,8 @@ import {
   Bot,
   Bell,
 } from "lucide-react";
+
+
 
 function TipsPage() {
   const {
@@ -180,9 +183,13 @@ function TipsPage() {
       </button>
 
       {/* Profile avatar */}
-      <div className="h-11 w-11 rounded-full overflow-hidden bg-green-100 flex items-center justify-center text-[#2F6B3F] font-bold text-lg shrink-0">
-        {localStorage.getItem("name")?.charAt(0)?.toUpperCase() || "?"}
-      </div>
+     <Link 
+to="/profile"
+aria-label="मेरी प्रोफ़ाइल"
+className="h-11 w-11 rounded-full overflow-hidden bg-green-100 flex items-center justify-center text-[#2F6B3F] font-bold text-lg shrink-0"
+>
+  {localStorage.getItem("name")?.charAt(0)?.toUpperCase() || "?"}
+</Link>
     </div>
   </div>
 </div>
