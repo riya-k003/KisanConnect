@@ -6,6 +6,7 @@ import {authService} from "../../services/authService";
 function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [error , setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,6 +27,7 @@ function Login() {
 
       navigate("/tips");
     } catch (error) {
+      setError(error.message || "Something went wrong during login.");
       console.log(error);
     }
   };
@@ -76,6 +78,14 @@ function Login() {
       >
         Login →
       </button>
+
+      {error && (
+        <div className=" flex itens-start gap-2 bg-red-50 border border-red-100 rounded-xl py-3">
+          <p className="text-sm text-red-600">
+            {error}
+          </p>
+        </div>
+      )}
 
     </form>
   );
