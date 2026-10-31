@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState , useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import {authService} from "../../services/authService";
 
@@ -13,19 +13,24 @@ function Login() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  useEffect(() => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("role");
+  localStorage.removeItem("name");
+}, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const data = await authService.login(formData);
       localStorage.setItem("token", data.token);
-
-      const decoded = JSON.parse(atob(data.token.split(".")[1]));
-      localStorage.setItem("role" , decoded.role);
-      localStorage.setItem("name" , decoded.name);
+      localStorage.setItem("role" , data.role);
+      localStorage.setItem("name" , data.name);
 
       window.location.href = "/tips";
 
       navigate("/tips");
+
     } catch (error) {
       setError(error.message || "Something went wrong during login.");
       console.log(error);
@@ -78,7 +83,7 @@ function Login() {
       >
         Login →
       </button>
-
+ 
       {error && (
         <div className=" flex itens-start gap-2 bg-red-50 border border-red-100 rounded-xl py-3">
           <p className="text-sm text-red-600">
